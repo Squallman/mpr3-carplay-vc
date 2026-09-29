@@ -1,6 +1,6 @@
 # MPR3 research analysis
 
-This tree contains the chronological Phase 1–7 reverse-engineering evidence
+This tree contains the chronological Phase 1–8 reverse-engineering evidence
 for Audi MIB3 Premium / MPR3 P3695. Reports are preserved as evidence records;
 they are not silently rewritten to match later conclusions.
 
@@ -18,6 +18,7 @@ direct evidence.
 | 5 | `phase5/implementation-seams.md` | Can a sidecar/hook preserve stock 110? | Direct encoder path and likely SETUP PLT seam support offline sidecar design. |
 | 6 | `phase6/runtime-hook-contract.md` | What are the runtime-hook and advertisement contracts? | Three-argument SETUP ABI and display callback shape were recovered; deployment policy and descriptor details remain unknown. |
 | 7 | [phase7/phase7-input-contracts.md](phase7/phase7-input-contracts.md) | What input ABI, ownership, advertisement and iAP2 gates can be closed statically? | Exact CF keys/primitives and generic displays slot recovered; Wireless parent24/children0,1,2,4 distinguished from MHI3; full adapter ownership/client gates remain open. |
+| 8 | [phase8/phase8-ownership-secondary-display.md](phase8/phase8-ownership-secondary-display.md) | Can request ownership and second-display/client blockers be closed without implementation? | Stock SETUP CF input contract ready; display helper and reference accounting recovered; client-valid second descriptor/type111 trigger reach a bounded static limit. |
 
 Phase 7 supporting reports:
 
@@ -29,6 +30,19 @@ Phase 7 supporting reports:
 Phase 7 corrects the earlier unnamed SETUP key address, a proposed display-name
 interpretation and the assumption that disabled test-HMI dimensions establish
 active geometry. Earlier evidence records remain unchanged.
+
+Phase 8 supporting reports:
+
+- [Request escape](phase8/request-escape-analysis.md), [cleanup matrix](phase8/setup-cleanup-matrix.md), [request parser origin](phase8/setup-request-origin.md), [CF readiness v2](phase8/cf-adapter-readiness-v2.md).
+- [AddScreenDisplay ABI](phase8/airplay-add-screen-display.md), [producer inventory](phase8/display-descriptor-producers.md), [UUID](phase8/display-uuid-contract.md), [geometry source](phase8/display-geometry-source.md), [second descriptor](phase8/second-display-descriptor-contract.md).
+- [Displays references](phase8/displays-reference-accounting.md), [advertisement readiness v2](phase8/advertisement-adapter-readiness-v2.md), [DSI state provenance](phase8/dsi-display-state-provenance.md).
+- [Wireless identification lifecycle](phase8/wireless-carplay-identification-lifecycle.md), [child17 insertion boundary](phase8/child17-insertion-contract.md), [secondary gates](phase8/secondary-display-gates.md), [type111 structure](phase8/type111-descriptor-contract.md).
+- [Final static causality](phase8/type111-causality-final-static.md), [static limit and residual local work](phase8/static-re-limit.md), [document-only future observations](phase8/future-runtime-evidence-plan.md).
+
+Phase 8 uses `STATIC_LIMIT_REACHED` only for an exhausted boundary whose missing
+fact belongs to client/runtime behavior. It does not replace UNKNOWN with a
+target fact or claim all local HMI/property writers were exhausted. Historical
+arrow provenance may be labeled `HISTORICAL ONLY`; it is not P3695 proof.
 
 The local P3695 data is outside this tracked analysis tree at
 `.local-research/mpr3/P3695/` and is intentionally ignored.

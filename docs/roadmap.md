@@ -37,6 +37,18 @@ thread-safety remain UNKNOWN. No shared hook or deployment mechanism is produced
 
 ## Stage 4 — separately authorized future work
 
+Phase 8 establishes **READY_FOR_CF_ADAPTER** for a dedicated input-adapter
+implementation branch using the recovered stock SETUP lifetime and scoped
+cleanup contract. No CF implementation was added by that research. Advertisement
+and iAP2 adapters remain blocked. See [Phase 8 readiness](../research/analysis/phase8/cf-adapter-readiness-v2.md).
+
+Client-valid second-display identity/schema and the iOS type111 trigger reach
+a bounded static limit. Their next evidence stage needs stock identification,
+/info and SETUP observations, active geometry and callback lifetime checks,
+with any controlled comparison separately justified and authorized. The
+[future evidence plan](../research/analysis/phase8/future-runtime-evidence-plan.md)
+is documentation only; unclosed local HMI/property provenance remains UNKNOWN.
+
 Bench/runtime diagnostics for loader/COMM policy, displayable occupancy,
 endpoint detection, concurrent pipeline behavior, and output restoration.
 
