@@ -9,6 +9,12 @@ navigation video path to a Virtual Cockpit through stock VideoEncoding.
 
 **Current implementation:** host-only mocked prototype at repository root.
 
+**Stage 3:** opt-in `target/` contracts with canonical opaque three-argument
+SETUP ABI, testable resolver, exact pass-through and an unlinked exported entry
+object. Core architecture is unchanged. CF/service adapters and restoration
+remain NOT IMPLEMENTED; no shared hook is produced. See `docs/target-contracts.md`,
+`docs/corefoundation-target-contract.md`, and `docs/target-adapter-contracts.md`.
+
 **Key proven seams:** `AirPlayReceiverSessionSetup`, ScreenStream lifecycle,
 `dint_create_displayable`, `IpTeConnection::getDisplayable`,
 `setActiveDisplayable`, and `CEncoder::feed`.
