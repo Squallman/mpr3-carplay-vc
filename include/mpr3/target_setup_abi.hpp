@@ -1,10 +1,4 @@
 #pragma once
-#include "mpr3/airplay_types.hpp"
-namespace mpr3::target {
-// Evidence-only declaration: Phase 6 airplay-session-setup-abi.md.
-// No host request/descriptor implements the CoreFoundation ABI.
-struct OpaqueCFDictionary;
-using CFDictionaryRef = const OpaqueCFDictionary *;
-using SetupABI = int (*)(AirPlayReceiverSessionPrivate *, CFDictionaryRef, CFDictionaryRef *);
-SetupABI resolveOriginalSetup();
-} // namespace mpr3::target
+// Compatibility include for target consumers; requires target/include.
+// The ABI is declared only in the canonical target header.
+#include "mpr3/target/airplay_setup_abi.hpp"

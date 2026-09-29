@@ -19,9 +19,10 @@ CoreFoundation/ScreenStream/display-init/COMM bindings are introduced.
 The CMake dependency graph is `tests -> mocks -> core`, with tests also directly
 linking core. Core never includes `mocks.hpp` or compiles a `mocks/` source.
 The mock header lives under `mocks/include/`, exported only by `mpr3_mocks`.
-`MPR3_ENABLE_TARGET_LOADER` defaults OFF; host builds need no target library.
-The existing optional `dlsym(RTLD_NEXT)` resolver is an isolated host model,
-not target loader validation.
+Host builds need no target library. Stage 3 replaces the core-bound
+`MPR3_ENABLE_TARGET_LOADER` model with separately opt-in
+`MPR3_BUILD_TARGET_CONTRACTS` / `MPR3_ENABLE_POSIX_TARGET_RESOLVER`; both default
+OFF. See [target contracts](target-contracts.md).
 
 Ownership is explicit: descriptors are `shared_ptr<const ISetupDescriptor>`;
 filtered requests, pipelines, and displayable leases are `unique_ptr` objects.
@@ -72,7 +73,8 @@ int AirPlayReceiverSessionSetup(
     CFDictionaryRef *);
 ```
 
-`target_setup_abi.hpp` uses opaque target-only types for this shape. The host
+`target_setup_abi.hpp` now forwards to the canonical target header, which uses
+opaque target-only types for this shape. The host
 `ISetupRequest` and `SetupResponse` are not ABI-compatible with CoreFoundation;
 no mock pointer aliases are used as target CF references. Exact target retain
 counts and error-path ownership remain UNKNOWN.

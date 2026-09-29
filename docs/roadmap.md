@@ -21,12 +21,19 @@ slot, iOS type-111 trigger, P3695 iAP2 parameter-17 behavior, active endpoint
 and service variant, safe displayable occupancy, target lifecycle/teardown,
 and loader/COMM policy. None has been promoted from UNKNOWN to a constant.
 
-## Stage 3 — future
+## Stage 3 — target boundary completed offline; adapters blocked
 
-Evidence-backed target adapters and cross-build only; validate exports,
-CoreFoundation ownership, and linking without vehicle deployment. The optional
-host resolver model remains disabled by default. No target adapters are
-implemented in v2.
+Canonical opaque SETUP ABI, injectable typed original resolver, exact pass-through,
+self-resolution rejection, capability metadata and unlinked C export object are
+implemented. Host contract tests and installed-tool AArch64 compile/symbol checks
+are opt-in; core/default builds require no target libraries. See
+[target contracts](target-contracts.md).
+
+Real [CF manipulation](corefoundation-target-contract.md) and
+[ScreenStream/display-init/COMM adapters](target-adapter-contracts.md) remain
+NOT IMPLEMENTED pending exact ABIs/ownership/policy. Output restoration blocks
+target activation. Loader behavior, runtime resolver failure policy and target
+thread-safety remain UNKNOWN. No shared hook or deployment mechanism is produced.
 
 ## Stage 4 — separately authorized future work
 

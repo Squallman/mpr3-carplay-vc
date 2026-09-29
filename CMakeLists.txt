@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
 project(mpr3_offline_prototype LANGUAGES CXX)
 
-option(MPR3_ENABLE_TARGET_LOADER "Compile optional host dlsym resolver model" OFF)
+option(MPR3_BUILD_TARGET_CONTRACTS "Build offline target contracts, tests and entry OBJECT" OFF)
+option(MPR3_ENABLE_POSIX_TARGET_RESOLVER "Build opt-in POSIX RTLD_NEXT lookup" OFF)
+if(MPR3_ENABLE_TARGET_LOADER)
+  message(FATAL_ERROR "MPR3_ENABLE_TARGET_LOADER was replaced by explicit target-contract options")
+endif()
+if(MPR3_ENABLE_POSIX_TARGET_RESOLVER AND NOT MPR3_BUILD_TARGET_CONTRACTS)
+  message(FATAL_ERROR "POSIX resolver requires MPR3_BUILD_TARGET_CONTRACTS=ON")
+endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -10,13 +17,8 @@ add_library(mpr3_core
   sidecar/secondary_session.cpp
   sidecar/secondary_controller.cpp
   sidecar/runtime_config.cpp
-  hook/airplay_setup_hook.cpp
-  hook/original_resolver.cpp)
+  hook/airplay_setup_hook.cpp)
 target_include_directories(mpr3_core PUBLIC include)
-target_compile_definitions(mpr3_core PUBLIC MPR3_ENABLE_TARGET_LOADER=$<BOOL:${MPR3_ENABLE_TARGET_LOADER}>)
-if(MPR3_ENABLE_TARGET_LOADER)
-  target_link_libraries(mpr3_core PRIVATE ${CMAKE_DL_LIBS})
-endif()
 
 add_library(mpr3_mocks
   mocks/mock_corefoundation.cpp
@@ -48,3 +50,38 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
 endif()
 enable_testing()
 add_test(NAME mpr3_tests COMMAND mpr3_tests)
+
+if(MPR3_BUILD_TARGET_CONTRACTS)
+  # Force STATIC even with BUILD_SHARED_LIBS; no loadable hook is produced.
+  add_library(mpr3_target_contracts STATIC
+    target/airplay/original_setup_resolver.cpp target/airplay/setup_bridge.cpp)
+  target_include_directories(mpr3_target_contracts PUBLIC target/include include)
+  if(MPR3_ENABLE_POSIX_TARGET_RESOLVER)
+    if(NOT UNIX)
+      message(FATAL_ERROR "POSIX target lookup requires a POSIX host")
+    endif()
+    target_sources(mpr3_target_contracts PRIVATE target/airplay/posix_setup_symbol_lookup.cpp)
+    target_compile_definitions(mpr3_target_contracts PUBLIC MPR3_ENABLE_POSIX_TARGET_RESOLVER=1)
+    target_link_libraries(mpr3_target_contracts PRIVATE ${CMAKE_DL_LIBS})
+  endif()
+  add_library(mpr3_target_entry_object OBJECT target/abi/airplay_setup_entry.cpp)
+  target_include_directories(mpr3_target_entry_object PRIVATE target/include include)
+  add_library(mpr3_target_header_object OBJECT target/tests/abi_header_consumer.cpp)
+  target_include_directories(mpr3_target_header_object PRIVATE target/include include)
+  add_executable(mpr3_target_tests
+    target/tests/test_original_setup_resolver.cpp
+    target/tests/test_setup_bridge.cpp target/tests/test_target_contracts.cpp)
+  target_include_directories(mpr3_target_tests PRIVATE target/tests)
+  target_link_libraries(mpr3_target_tests PRIVATE mpr3_target_contracts mpr3_core)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    foreach(target mpr3_target_contracts mpr3_target_entry_object mpr3_target_header_object mpr3_target_tests)
+      target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endforeach()
+  endif()
+  add_test(NAME mpr3_target_tests COMMAND mpr3_target_tests)
+  if(UNIX)
+    add_test(NAME mpr3_target_dependency_boundary
+      COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/check-target-dependencies.sh"
+              "$<TARGET_FILE:mpr3_target_contracts>")
+  endif()
+endif()
