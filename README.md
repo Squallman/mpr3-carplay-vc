@@ -11,10 +11,12 @@ screen path from iPhone to an Audi cluster display.
 
 ## Current status
 
-An offline architectural prototype exists. It uses mocked CoreFoundation,
-ScreenStream, decoder, displayable, and VideoEncoding services. There is no
-vehicle deployment, firmware patch, install package, or claim that P3695
-supports working AltScreen today.
+Prototype v2 models the complete proposed control flow on the host: SETUP
+filtering, stock forwarding, a secondary controller, configured displayable
+acquisition, pipeline construction/startup, optional VideoEncoding activation,
+and deterministic cleanup. Request adapters and all device services are mocked.
+There is no vehicle deployment, firmware patch, install package, or claim that
+P3695 supports working AltScreen today.
 
 ## Proven high-level findings
 
@@ -37,8 +39,19 @@ unresolved.
 ## Prototype
 
 The implementation is at repository root in `include/`, `hook/`, `sidecar/`,
-`mocks/`, and `tests/`. It is intentionally host-only and fail-open: secondary
-failure must not break stock stream 110.
+`mocks/`, and `tests/`. `mpr3_core` contains abstract request filtering and
+secondary orchestration; `mpr3_mocks` contains host implementations;
+`mpr3_tests` links both. Core hook interfaces contain no MockCF types and are
+not CoreFoundation ABI-compatible.
+
+Stock SETUP completes first and its exact result/response are preserved.
+Non-111 descriptors retain their original identity and opaque fields. A
+secondary failure cleans only secondary resources. Runtime configuration has
+no default displayable name or numeric target IDs. Missing activation IDs can
+permit an offline pipeline, with output explicitly marked skipped.
+
+See [`docs/offline-prototype-v2.md`](docs/offline-prototype-v2.md) for lifecycle,
+policies, contracts, test coverage, and target adapter boundaries.
 
 ## Research
 
@@ -61,5 +74,6 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-Direct Apple Clang host compilation was previously validated; no target
-AArch64 binary is executed.
+If CMake is unavailable, the script uses `${CXX:-clang++}` directly with C++17
+and `-Wall -Wextra -Wpedantic -Werror`. Both build paths run the same test suite
+and print its test-group/assertion totals. No target AArch64 binary is executed.

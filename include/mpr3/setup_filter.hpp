@@ -1,38 +1,25 @@
 #pragma once
-
 #include "mpr3/airplay_types.hpp"
+#include "mpr3/events.hpp"
+#include "mpr3/secondary_control.hpp"
 #include <functional>
-
 namespace mpr3 {
-
-// ABI model only. The real target declaration is isolated here and is not
-// asserted to be a usable host/CoreFoundation declaration.
-using TargetSetupABI = int (*)(AirPlayReceiverSessionPrivate *, CFDictionaryRef,
-                               CFDictionaryRef *); // libairplay.so @ 0x58dc0
-
 using OriginalSetupFn = std::function<int(AirPlayReceiverSessionPrivate *,
-                                          const MockCFRequest &, MockSetupResponse *)>;
-
+                                        const ISetupRequest &, SetupResponse *)>;
 struct SetupFilterResult {
-  MockCFRequest stockRequest;
-  std::vector<std::shared_ptr<MockCFDictionary>> secondaryDescriptors;
-  bool hadSecondary = false;
+  // Null means forward the original request object unchanged.
+  std::unique_ptr<ISetupRequest> stockRequest;
+  DescriptorCollection secondaryDescriptors;
   bool parseFailed = false;
 };
-
-SetupFilterResult splitSecondaryDescriptors(const MockCFRequest &request);
-
+SetupFilterResult splitSecondaryDescriptors(const ISetupRequest &);
 class AirPlaySetupHook {
  public:
-  AirPlaySetupHook(OriginalSetupFn original, std::function<bool(const std::vector<std::shared_ptr<MockCFDictionary>> &)> secondaryStart);
-  int setup(AirPlayReceiverSessionPrivate *session, const MockCFRequest &request,
-            MockSetupResponse *response);
-  const SetupFilterResult &lastFilter() const { return lastFilter_; }
-
+  AirPlaySetupHook(OriginalSetupFn, ISecondaryController &, IEventSink * = nullptr);
+  int setup(AirPlayReceiverSessionPrivate *, const ISetupRequest &, SetupResponse *);
  private:
   OriginalSetupFn original_;
-  std::function<bool(const std::vector<std::shared_ptr<MockCFDictionary>> &)> secondaryStart_;
-  SetupFilterResult lastFilter_;
+  ISecondaryController &secondary_;
+  IEventSink *events_;
 };
-
 } // namespace mpr3
