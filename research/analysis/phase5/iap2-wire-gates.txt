@@ -1,0 +1,31 @@
+P3695 iAP2 wire-gate investigation
+
+P3695 has named wireless CarPlay identification classes and serializers:
+  CMessageParameterWirelessCarplayTransportComponent
+  CMessageParameterWirelessCarplayTransportComponents
+  CIAP2AccessoryIdentificationWireless::addIdentificationInformation
+  CIAP2ControlSessionModuleIdentMsgComposer::identificationInformation
+
+The emitted/configured fields proven locally are the wireless transport
+component identifier and name. extdevconfig sets identifier=3 and name
+WirelessCarPlayTransportComponent. iap2connectionmanager strings expose the
+corresponding configuration keys.
+
+The inspected P3695 symbol/string set contains no ThemeAssets class, named
+ThemeAssets serializer, altScreen identifier, or enabledFeatures identifier.
+The generic iAP2 parameter framework supports typed scalar/vector/string
+parameters, but no P3695-specific nested WirelessCarPlay subparameter table
+with ID 17 was recovered.
+
+| Subparameter ID | Serialized type/length | Meaning | P3695 emits? |
+|---:|---|---|---|
+| 17 | historical MHI3 hypothesis only | ThemeAssets-like gate in historical material | UNKNOWN; no P3695 implementation proof |
+
+The correct classification is not “rejected”: a generic numeric serializer could
+conceivably carry an unnamed field, but no switch/table/constructor proving it
+was found. It is also not “supported”. P3695 support for historical nested
+parameter 17 is UNKNOWN, with STRONG EVIDENCE that no named implementation is
+present.
+
+Historical MHI3 findings remain comparative only. They cannot establish P3695
+wire IDs or payload shapes.

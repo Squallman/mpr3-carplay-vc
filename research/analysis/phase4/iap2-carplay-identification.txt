@@ -1,0 +1,44 @@
+P3695 iAP2 CarPlay identification
+
+extdevconfig.json contains:
+  wirelessCarPlayTransportComponent.identifier = 3
+  wirelessCarPlayTransportComponent.name = WirelessCarPlayTransportComponent
+  productPlanUUID = fc496624
+  DisableWirelessCarPlayMsgsForUnsupportedHubs = true
+
+The same configuration declares standard USB device/host, Bluetooth, vehicle
+information and location information components. Location flags include GPS
+fix, recommended minimum GPS transit data, and vehicle speed data.
+
+dio_manager dynamic symbols include:
+  CIAP2AccessoryIdentificationWireless::prepareIdentificationInformation
+  CIAP2AccessoryIdentificationWireless::addIdentificationInformation
+  getWirelessCarPlayTransportComponentIdentifier
+  getWirelessCarPlayTransportComponentName
+
+The recovered builder serializes model/name/manufacturer/serial/firmware/
+hardware/language fields and constructs wireless CarPlay, Bluetooth, USB and
+other standard transport/component records. The wireless component identifier
+is written as a small integer field; the exact wire parameter IDs were not
+recovered with confidence.
+
+libesoiap2.so contains CMessageParameterWirelessCarplayTransportComponent and
+related plural/component classes. No local ThemeAssets class, symbol, literal,
+or configuration key was found. No local AltScreen/enabledFeatures identifier
+was found in the scanned P3695 binaries/configuration.
+
+Classification:
+  wireless CarPlay transport component present: PROVEN
+  ThemeAssets-like named implementation: not found, STRONG EVIDENCE of absence
+  exact wire-level omission versus generic numeric serialization: UNKNOWN
+  routeGuidance=%i being Apple's 0x5200 family: UNKNOWN
+
+Historical MHI2Q material describes an iAP2 ThemeAssets gate and additional
+AltScreen capability negotiation. That is comparative evidence only. It does
+not prove that P3695 must use the same parameter IDs or that the P3695 builder
+cannot emit an equivalent unnamed parameter.
+
+The input-side requirement is therefore layered and unresolved: an iAP2
+capability gate, AirPlay display/features advertisement, and SETUP type-111
+acceptance may all be involved. P3695 evidence proves only the standard
+wireless transport component and the separate AirPlay single-screen path.

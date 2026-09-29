@@ -1,0 +1,23 @@
+P3695 candidate displayables from displaymanager.json
+
+| ID | Name | Production references | Known owner | Candidate | Confidence |
+|---:|---|---|---|---|---|
+| 40 | Displayable_Cluster_Map | Audi nav config/HMI JS | native navigation | NOT SUITABLE / CONFLICT RISK | PROVEN |
+| 42 | Displayable_Cluster_Map_Route_Guidance | Audi nav config/HMI JS | native navigation | NOT SUITABLE / CONFLICT RISK | PROVEN |
+| 60 | Displayable_Hud_Map | Audi nav config/HMI JS | native navigation | NOT SUITABLE / CONFLICT RISK | PROVEN |
+| 93 | Displayable_External_Smarthphone | dio_manager.json/gal.json | CarPlay/GAL | NOT SUITABLE / CONFLICT RISK | STRONG EVIDENCE |
+| 88-89 | Digital_Videoplayer_1/2 | displaymanager.json only | media/video unknown | POSSIBLE | UNKNOWN |
+| 94-100 | Digital_Video_Player_* and *_StreamOnly | displaymanager.json only | video unknown | POSSIBLE | UNKNOWN |
+| 137-145 | Displayable_Debug_1..9 | displaymanager.json only | debug unknown | POSSIBLE; best current lead | UNKNOWN |
+| 17 | Displayable_Urschleim | displaymanager annotation | debug annotation | NOT SUITABLE | STRONG EVIDENCE |
+| 150 | Displayable_Swup_HMI | displaymanager annotation | SWUP/HMI | NOT SUITABLE | STRONG EVIDENCE |
+| 201-204 | virtual annotation displayables | displaymanager annotations | annotation/debug | NOT SUITABLE | STRONG EVIDENCE |
+
+The strongest current lead is Displayable_Debug_1 (137): the signature scan
+found no production reference beyond displaymanager.json. This is only POSSIBLE,
+not GOOD CANDIDATE, because dmdt-ivi states configured displayables may already
+be occupied and static data provides no occupancy proof. No safe candidate is
+established. Generic video slots may also have hidden media ownership.
+
+Displayable list from the default LayerConfig includes IDs -1, 1-17, 20-30,
+40-48, 60-63, 70, 80-101, 120, 137-145, 150, 200-204, and 300-315.

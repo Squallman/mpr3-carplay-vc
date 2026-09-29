@@ -1,0 +1,38 @@
+P3695 sidecar IPC and policy evidence
+
+Classification for an arbitrary new process calling VideoEncoding:
+  UNKNOWN, with STRONG EVIDENCE that the stock client mechanism is reusable.
+
+Evidence for reusable client mechanism:
+  vesdt is a standalone executable using libcomm/libosal/libiplutil and the
+  service identity asi.VideoEncoding.IVideoEncoding.
+  It constructs AgentStarter, ServiceRegistration and comm::Proxy objects and
+  does not link against videoencoderservice internals.
+  The EMS table exposes the setActiveDisplayable method contracts.
+
+This proves that a separate executable can be a client in the intended IPC
+architecture. It does not prove that any arbitrary UID/process is authorized.
+
+Relevant enforcer data:
+  dio_manager runs UID/GID 1122 with AppArmor profile /etc/enforcer/apparmor/carplay.
+  smartphone_integrator runs UID 0 with supplementary groups 1004 and 1122,
+    profile /etc/enforcer/apparmor/smartphone.
+  iap2connectionmanager runs UID/GID 1125 with profile
+    /etc/enforcer/apparmor/iap2.
+  mcp_displaymanager runs UID/GID 1081 with profile
+    /etc/enforcer/apparmor/mcp_displaymanager.
+
+No standalone sidecar enforcer entry or extracted AppArmor profile for a new
+process was present in the local extracted file set. The profile contents,
+COMM broker socket rules, and any service-level client-ID validation therefore
+remain UNKNOWN. No claim of PROVEN YES or BLOCKED BY POLICY is justified.
+
+The available enforcer JSON does not enable namespaces for dio_manager,
+iAP2, or DisplayManager, so namespace isolation is not evidence against a
+sidecar. It does not address AppArmor or broker authorization.
+
+Required proof before deployment would be:
+  same UID/profile or an explicitly allowed profile;
+  access to the COMM broker endpoint;
+  service discovery permission for asi.VideoEncoding.IVideoEncoding;
+  successful method invocation with the chosen interface variant.

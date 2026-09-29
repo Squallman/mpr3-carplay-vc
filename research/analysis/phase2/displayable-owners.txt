@@ -1,0 +1,6 @@
+P3695 Phase 2 ownership result
+
+No new displayable creator/owner was proven in this phase. The video encoder
+proves consumption by integer displayable ID through IpteConnection::getDisplayable
+and CEncoder::feed, but that does not identify the creator or writer of IDs
+26, 29, 40, 42, 60, or 93.

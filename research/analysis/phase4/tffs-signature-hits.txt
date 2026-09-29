@@ -1,0 +1,55 @@
+P3695 Phase 4 TFFS signature scan
+Scanner: .local-research/mpr3/analysis/phase4/tools/scan_phase4_signatures.py
+Images scanned: extracted/ivi_root_C3.img and extracted/opt_ivi_C3.img
+Output is a high-value subset of the raw scan; each row is image, path, matched signature, file size.
+
+ivi_root_C3.img  /usr/bin/videoencoderservice  setActiveDisplayable  264776
+ivi_root_C3.img  /usr/bin/videoencoderservice  setDisplayable  264776
+ivi_root_C3.img  /usr/bin/videoencoderservice  requestVideoConnection  264776
+ivi_root_C3.img  /usr/bin/videoencoderservice  releaseVideoConnection  264776
+ivi_root_C3.img  /usr/bin/videoencoderservice  getDisplayable  264776
+ivi_root_C3.img  /usr/bin/videoencoderservice  IpteConnection  264776
+ivi_root_C3.img  /usr/lib/libdecoder_al.so  createDisplayable  112984
+ivi_root_C3.img  /usr/lib/libipte.so  getDisplayable  42984
+ivi_root_C3.img  /usr/lib/libipte.so  IpteConnection  42984
+ivi_root_C3.img  /usr/lib/libdisplayinit.so  getDisplayable  67880
+ivi_root_C3.img  /usr/lib/liblayerconfig.so  getDisplayable  46992
+ivi_root_C3.img  /etc/eso/displaymanager.json  Displayable_Cluster_Map  17087
+ivi_root_C3.img  /etc/eso/displaymanager.json  Displayable_Cluster_Map_Route_Guidance  17087
+ivi_root_C3.img  /etc/eso/displaymanager.json  Displayable_Hud_Map  17087
+ivi_root_C3.img  /etc/eso/displaymanager.json  Displayable_External_Smarthphone  17087
+ivi_root_C3.img  /usr/bin/encoderal_spec  getDisplayable  27056
+ivi_root_C3.img  /usr/bin/encoding_poc  getDisplayable  92288
+ivi_root_C3.img  /usr/bin/vc-ldt  getDisplayable  39344
+ivi_root_C3.img  /usr/bin/mcp_viwibridge  getDisplayable  1030560
+ivi_root_C3.img  /usr/bin/ipte_sample  getDisplayable  14384
+ivi_root_C3.img  /usr/bin/showimage  getDisplayable  26808
+
+opt_ivi_C3.img  /navigation/bin/navStartup  routeGuidance  45202320
+opt_ivi_C3.img  /navigation/bin/navStartup  cluster  45202320
+opt_ivi_C3.img  /navigation/bin/navStartup  navigation  45202320
+opt_ivi_C3.img  /navigation/bin/navPatch  navigation  266632
+opt_ivi_C3.img  /navigation/config/audi/application_configuration.json  Displayable_Cluster_Map  58041
+opt_ivi_C3.img  /navigation/config/audi/application_configuration.json  Displayable_Cluster_Map_Route_Guidance  58041
+opt_ivi_C3.img  /navigation/config/audi/application_configuration.json  Displayable_Hud_Map  58041
+opt_ivi_C3.img  /navigation/config/audi/application_configuration.json  cluster  58041
+opt_ivi_C3.img  /hmi/ui/app/main.17a1455a44197c571024685...js  getDisplayable  4551370
+opt_ivi_C3.img  /hmi/ui/app/main.17a1455a44197c571024685...js  Displayable_Cluster_Map  4551370
+opt_ivi_C3.img  /hmi/ui/app/main.17a1455a44197c571024685...js  Displayable_Cluster_Map_Route_Guidance  4551370
+opt_ivi_C3.img  /hmi/ui/app/main.17a1455a44197c571024685...js  Displayable_Hud_Map  4551370
+opt_ivi_C3.img  /hmi/ui/app/main.17a1455a44197c571024685...js  Displayable_External_Smarthphone  4551370
+opt_ivi_C3.img  /hmi/ui/app/navi-fpk-fpk-navi-module-ngfactory...js  getDisplayable  125099
+opt_ivi_C3.img  /media/bin/media  WirelessCarPlayTransportComponent  12901216
+opt_ivi_C3.img  /media/bin/media  navigation  12901216
+
+Already-extracted smartphone/iAP2 scan hits:
+smartphone_integration/bin/dio_manager  WirelessCarPlayTransportComponent / displayUUID / navigation
+smartphone_integration/lib/libairplay.so  WirelessCarPlayTransportComponent / displayUUID
+iap2/bin/iap2connectionmanager  WirelessCarPlayTransportComponent / routeGuidance
+iap2/etc/extdevconfig.json  WirelessCarPlayTransportComponent
+smartphone_integration/etc/gal.json  Displayable_External_Smarthphone
+smartphone_integration/etc/dio_manager.json  Displayable_External_Smarthphone
+
+No literal setActiveDisplayable was found in the extracted navStartup, navPatch,
+or inspected HMI JavaScript artifacts. Raw integer IDs were not treated as
+ownership evidence.

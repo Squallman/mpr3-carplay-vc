@@ -1,0 +1,15 @@
+P3695 displayable ownership evidence
+
+| ID | Name | Creator | Writer | Consumer | Evidence | Confidence |
+|---:|---|---|---|---|---|---|
+| 26 | Displayable_Map_Cluster | UNKNOWN | UNKNOWN | display infrastructure/configured consumers | displaymanager.json; TFFS hits | UNKNOWN |
+| 29 | Displayable_Guidance_Cluster | UNKNOWN | UNKNOWN | display infrastructure/configured consumers | displaymanager.json; TFFS hits | UNKNOWN |
+| 40 | Displayable_Cluster_Map | UNKNOWN | UNKNOWN | video encoder can consume an ID | displaymanager.json; getDisplayable path | UNKNOWN |
+| 42 | Displayable_Cluster_Map_Route_Guidance | UNKNOWN | UNKNOWN | video encoder can consume an ID | displaymanager.json; getDisplayable path | UNKNOWN |
+| 60 | Displayable_Hud_Map | UNKNOWN | UNKNOWN | video encoder can consume an ID | displaymanager.json; getDisplayable path | UNKNOWN |
+| 93 | Displayable_External_Smarthphone | exact creator UNKNOWN | CarPlay renderer target | video/display pipeline can consume ID | dio_manager/gal config plus libairplay lifecycle | STRONG target-selection evidence |
+
+Newly extracted libdisplayinit.so exposes generic displayable creation and
+lookup functionality. That proves an API exists, not that it creates any of
+the six IDs. dmdt-ivi/vesdt/encoding_poc/encoderal_spec are diagnostic or
+test artifacts and are not treated as stock owners.

@@ -1,0 +1,32 @@
+P3695 libairplay ELF interposition matrix
+
+The inspected libairplay.so is AArch64 PIE/shared ELF with a dynamic symbol
+table. The requested functions are exported as global T symbols. Crucially,
+internal calls in the recovered code use PLT entries and R_AARCH64_JUMP_SLOT
+relocations for several functions, including AirPlayReceiverSessionSetup,
+AirPlayReceiverSessionScreen_Setup, Screen_Create, Screen_StartSession,
+Screen_ProcessFrames, AirPlayGetFeatures, ScreenStreamCreate and
+ScreenStreamProcessData.
+
+| Function | Exported | PLT/GOT call | Direct local call proven | LD_PRELOAD interceptable? |
+|---|---|---|---|---|
+| AirPlayReceiverSessionSetup | yes, 0x58dc0 | yes, JUMP_SLOT 0x15ebc0; call at 0x4c7bc | no | STRONG EVIDENCE YES |
+| AirPlayReceiverSessionScreen_Setup | yes, 0x5cf10 | yes, call at 0x590a8 via PLT 0x3e210 | no | STRONG EVIDENCE YES |
+| AirPlayReceiverSessionScreen_Create | yes, 0x5c950 | yes, call at 0x52e00 via PLT 0x3ede0 | no | STRONG EVIDENCE YES |
+| AirPlayReceiverSessionScreen_StartSession | yes, 0x5e0b0 | yes, call at 0x4efd8 via PLT 0x3d380 | no | STRONG EVIDENCE YES |
+| AirPlayReceiverSessionScreen_ProcessFrames | yes, 0x5d070 | yes, call at 0x4f000 via PLT 0x416a0 | no | STRONG EVIDENCE YES |
+| AirPlayGetFeatures | yes, 0x49d40 | yes, calls at 0x4a090/0x4ad44 via PLT 0x3d120 | no | STRONG EVIDENCE YES |
+| AirPlayInfoArrayAddScreenDisplay | yes, 0x578f0 | no internal PLT call recovered | no | EXPORTED, call-site UNKNOWN |
+| ScreenStreamCreate | yes, 0xf7360 | yes, call at 0x5e124 via PLT 0x40b10 | no | STRONG EVIDENCE YES |
+| ScreenStreamProcessData | yes, 0xf7b10 | yes, call at 0x5d6e4 via PLT 0x3e090 | no | STRONG EVIDENCE YES |
+
+No DT_FLAGS/DF_SYMBOLIC or BIND_NOW flag was shown by objdump -p. RELRO/GOT
+hardening details cannot be fully decoded with the installed host tools, but
+LD_PRELOAD resolution occurs before any post-start GOT protection. This is
+static evidence of preemption potential, not a tested runtime result.
+
+The strongest new result is that AirPlayReceiverSessionSetup is not only
+exported: the library's own session-start path calls its PLT entry. A preload
+replacement can therefore be technically possible without changing the ELF
+file. The exact dynamic-loader behavior on the target and symbol versioning
+remain untested.

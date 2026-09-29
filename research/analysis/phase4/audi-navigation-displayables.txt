@@ -1,0 +1,60 @@
+P3695 Audi navigation displayables
+
+Extracted artifact:
+  navigation/config/audi/application_configuration.json
+  SHA-256 2b43299f278dd9c246607f69f4daf89b7669b8d3444b4386a69a11786e5bbef4
+
+Relevant configuration:
+  views.main_map.displayable = Displayable_Map
+  views.secondary_map.displayable = Displayable_Main_Secondary
+  views.cluster_map.displayable = Displayable_Cluster_Map
+  views.cluster_map.map_display_dsi_instance_id = 1
+  views.cluster_overlay.displayable = Displayable_Cluster_Map_Route_Guidance
+  views.cluster_overlay.map_guidance_display_dsi_instance_id = 1
+  views.hud.displayable = Displayable_Hud_Map
+  views.hud.map_guidance_display_dsi_instance_id = 2
+
+The same file contains view dimensions/viewport geometry. It maps navigation
+view roles to displayable names and DSI instances, but does not identify the
+videoencoder RPC caller or select a video encoder display ID.
+
+HMI navigation module artifact:
+  navi-fpk-fpk-navi-module-ngfactory.941acd258e647290bcd2.js
+  SHA-256 19b7dbe3ec665fa9c7564654c95627272d10a154c0cdf29ade66c906d32259fc
+
+Recovered JavaScript constants include:
+  displayName = CLUSTER
+  displayableName = CLUSTER_MAP
+  layerName = Layer_Navigation_Map_Base
+  source and target rectangles 1920x600
+  a cluster subframe using Layer_Navi_Statusline
+
+These are strong evidence for the navigation presentation mapping, not proof of
+which native process performs final registration.
+
+navStartup artifact:
+  SHA-256 6faa310b5f2afc05d8ed6f8136b2bd755442894c107e9a5cee5be19f3a148046
+
+PROVEN: navStartup imports dint_create_displayable, dint_destroy_displayable,
+dint_get_surface, dint_create_context, dint_choose_config, dint_make_current,
+and dint_swap_buffers. There is one recovered direct call to
+dint_create_displayable at file/virtual address 0x69e2bc and a destroy call at
+0x69dd0c. The call receives an indirect name pointer from the navigation object
+and an output/object slot; the exact name at that call is not a literal
+Displayable_Cluster_Map.
+
+Therefore:
+  native navigation is PROVEN to create and render at least one configured
+  displayable using the display-init API;
+  exact creators for IDs 40, 42 and 60 individually are UNKNOWN;
+  the HMI JavaScript is not proven to call setActiveDisplayable.
+
+Ownership table:
+  26 Displayable_Map_Cluster                 creator/writer UNKNOWN
+  29 Displayable_Guidance_Cluster            creator/writer UNKNOWN
+  40 Displayable_Cluster_Map                  navStartup generic creator STRONG EVIDENCE; exact call UNKNOWN
+  42 Displayable_Cluster_Map_Route_Guidance   navStartup generic creator STRONG EVIDENCE; exact call UNKNOWN
+  60 Displayable_Hud_Map                      navStartup generic creator STRONG EVIDENCE; exact call UNKNOWN
+  93 Displayable_External_Smarthphone         creator/writer UNKNOWN
+
+Names in configuration alone are not treated as ownership proof.

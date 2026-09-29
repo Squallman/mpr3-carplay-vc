@@ -1,0 +1,22 @@
+P3695 AirPlay feature mask
+
+AirPlayGetFeatures @ libairplay.so 0x49d40 returns a configuration-derived
+value OR literal 0x6104040280. Set bits are 7, 9, 18, 26, 32, 37 and 38.
+
+| Bit | Mask | P3695 local meaning | Historical local reference | Confidence |
+| 7 | 0x80 | UNKNOWN | none recovered | UNKNOWN |
+| 9 | 0x200 | UNKNOWN | none recovered | UNKNOWN |
+| 18 | 0x40000 | UNKNOWN | none recovered | UNKNOWN |
+| 26 | 0x4000000 | UNKNOWN | none recovered | UNKNOWN |
+| 32 | 0x100000000 | UNKNOWN | none recovered | UNKNOWN |
+| 37 | 0x2000000000 | UNKNOWN | none recovered | UNKNOWN |
+| 38 | 0x4000000000 | UNKNOWN | none recovered | UNKNOWN |
+
+Searches for individual-bit tests, matching numeric literals, and historical
+repository occurrences did not produce a defensible semantic name. Historical
+AltScreen documents describe capability concepts but do not establish that any
+of these P3695 bits has that meaning.
+
+Conclusion: no AltScreen-related bit can be proven present or absent from the
+mask. The independently proven type-111 rejection is stronger evidence about
+input support than the unresolved feature-bit semantics.

@@ -1,0 +1,61 @@
+P3695 Phase 4: display registration API
+
+libdisplayinit.so dynamic symbols include:
+  dint_create_displayable @ 0x7cc0, size 0x704
+  dint_create_displayable_rvc @ 0x83d0, size 0x534
+  dint_destroy_displayable @ 0x7b90, size 0x124
+  dint_set_displayable_properties @ 0x69e0, size 0x140
+  dint_get_surface @ 0x6b20, size 0xfc
+  dint_get_resolution @ 0x9600
+
+There is no exported function literally named registerDisplayable or
+unregisterDisplayable in the inspected libdisplayinit symbol set. Registration
+and deregistration are internal to the create/destroy lifecycle.
+
+Recovered behavior of dint_create_displayable @ 0x7cc0:
+
+  input w0 is retained as an option/role value
+  input x1 is converted to a displayable name string
+  input x2/x3 are retained as integer dimensions or related properties
+  input x4/x5/x6/x7 are retained as context/config/output arguments
+  mcp::CLayerConfig::getDisplayableId(string const&) is called
+  negative/unresolved ID causes failure and logs:
+    displayable '%s' could not be resolved to an ID
+  successful path allocates an internal object, stores the resolved ID, dimensions
+  and properties, creates an EGL/UBM surface, and returns an object through an
+  output pointer.
+
+Strong evidence: creation is name/config based. The displayable must resolve
+through CLayerConfig; an arbitrary new integer is not sufficient for this API.
+This does not prove all runtime policy checks.
+
+liblayerconfig.so relevant methods:
+  mcp::CLayerConfig::getDisplayableId(string const&) @ 0x5350
+  getDisplayableName(uint32_t) @ 0x57c0
+  getDisplayableIds() @ 0x5010
+  isDisplayablePresent(uint32_t) const @ 0x4dc0
+  getDisplayId/getLayerId/getLayerDisplay and related lookup methods
+
+libipte.so relevant methods:
+  gfx::IpteConnection::create(string const&) @ 0x4ff0
+  getDisplayable(string const&, shared_ptr&) @ 0x5490
+  getDisplayable(int, shared_ptr&) @ 0x5900
+  gfx::IpteDisplayable::id @ 0x6060
+  width @ 0x6070, height @ 0x6080, format/stride/size/nativeBuffer accessors
+
+The IPTE API accepts lookup by name or integer and exposes dimensions. The
+inspected code does not prove writer/reader ownership enforcement, process
+scope, or whether two processes may write the same displayable.
+
+Approximate API shape, not a recovered C prototype:
+
+  int dint_create_displayable(role_or_flags,
+                              const char *displayable_name,
+                              int arg2, int arg3,
+                              void *arg4, void *arg5, void *arg6,
+                              void **out_displayable);
+  int dint_destroy_displayable(void *displayable);
+  int dint_get_surface(void *displayable, ...);
+  int dint_set_displayable_properties(void *displayable, ...);
+
+The ellipses are intentional: exact ABI types remain UNKNOWN.

@@ -1,0 +1,38 @@
+P3695 cluster encoder: direct versus composited
+
+Result: DIRECT, PROVEN for the videoencoderservice input path.
+
+Service-side control flow:
+
+  RPC displayable:i32
+    -> service stores/selects displayable ID
+    -> gfx::IpteConnection::getDisplayable(int, shared_ptr&) at 0x1e08c
+    -> IpteDisplayable::width/height validation
+    -> encoder configuration/open
+    -> gfx::CEncoder::feed(shared_ptr<IpteDisplayable>) at 0x1d498
+    -> muxer/transport output
+
+The inspected service path has no call to DisplayManager composition, layer
+composition, physical Display lookup, or cluster context before feed(). The
+display ID selects the encoder/service endpoint; the displayable integer is the
+actual IPTE input object.
+
+This proves direct consumption by videoencoderservice. It does not prove that
+any displayable can be written by a sidecar, nor that selecting an arbitrary
+candidate will be policy-safe while native navigation is active.
+
+Supporting evidence:
+  videoencoderservice imports IpTeConnection::getDisplayable and
+  CEncoder::feed.
+  strings include “try getDisplayable(%u)”, width/height verification,
+  invalid width/height, and “m_encoder->feed() failed”.
+  encoding_poc and encoderal_spec independently use getDisplayable(int) and
+  direct encoder feed, with no compositor dependency in their import sets.
+
+Thus the desired data path is structurally:
+
+  sidecar-created IPTE surface X -> videoencoderservice -> CEncoder -> VC
+
+The unresolved portions are service authorization, endpoint variant, surface
+creation/writer ownership, and whether a selected cluster endpoint can be
+switched without disrupting native output.

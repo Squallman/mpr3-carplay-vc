@@ -1,0 +1,31 @@
+P3695 AirPlay advertisement
+
+dio_manager:
+  getDisplays @ 0x1db510 calls createDisplaysDictionary @ 0x1d9be0.
+  The recovered helper builds one CFArray and one screen dictionary in the
+  observed path, then adds it to the array.
+
+The dictionary is driven by dio_manager.json:
+  Driver_Display
+  Displayable_External_Smarthphone / 93
+  Layer_Media_Base
+  1540x720 and physical dimensions 235x110
+  display name Audi MMI
+
+libairplay.so:
+  AirPlayInfoArrayAddScreenDisplay @ 0x578f0 is a generic array-append helper.
+  displayUUID, displays, AirPlayCreateModesDictionary and screen setup symbols
+  exist. Generic append capability does not prove a second descriptor is built.
+  AirPlayGetFeatures @ 0x49d40 ORs 0x6104040280 into a config-derived value.
+
+No second descriptor, screen role, alternate UUID, or AltScreen literal was
+proven in the P3695 path. The P3695 SETUP dispatcher is independently PROVEN
+to accept only descriptor types 100..110; type 111 reaches the common skip/error
+path at AirPlayReceiverSessionSetup around 0x59040-0x59060.
+
+AirPlay screen advertisement: one observed descriptor; generic multiple-entry
+primitive exists; exact multi-screen capability is UNKNOWN.
+Feature-bit meaning: all seven literal bits UNKNOWN.
+Requirement for iOS to send type 111: UNKNOWN in exact P3695 terms. At minimum,
+the implementation would need a compatible capability/advertisement path and a
+SETUP handler; iAP2 and AirPlay advertisement layers must not be conflated.

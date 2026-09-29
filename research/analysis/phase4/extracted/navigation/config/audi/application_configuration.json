@@ -1,0 +1,980 @@
+{
+    "views": {
+        "main_map": {
+            "displayable": "Displayable_Map",
+            "map_display_dsi_instance_id": 0
+        },
+        "secondary_map": {
+            "displayable": "Displayable_Main_Secondary",
+            "map_display_dsi_instance_id": 2
+        },
+        "cluster_map": {
+            "displayable": "Displayable_Cluster_Map",
+            "map_display_dsi_instance_id": 1,
+            "camera_focus_multiplier": 1.1,
+            "signpost": {
+                "layout": {
+                    "width": 500,
+                    "height": 71
+                },
+                "style": {
+                    "style_id": "1",
+                    "style_config_variant": "day",
+                    "use_fallback_data": true,
+                    "display_multiple_entries_per_line": false
+                }
+            },
+            "guidance_overlay": {
+                "safe_frame_margin": 68
+            },
+            "variants": {
+                "top_kombi": {
+                    "overlay_image": "assets/audi/800x246/map_stencil_mask.png",
+                    "guidance_overlay": {
+                        "safe_frame_margin": 40,
+                        "dtd_widget": {
+                            "svg_template_path": "assets/audi/800x246/follow/follow_dtd.svg",
+                            "icons_path"       : "file:///800x246/follow/flags",
+                            "layout": {
+                                "x": 80, "y": 12, "width": 166, "height": 0
+                            }
+                        },
+                        "dtm_widget": {
+                            "svg_template_path": "assets/audi/800x246/follow/follow_dtm.svg",
+                            "icons_path"       : "file:///800x246/follow/arrows",
+                            "layout": {
+                                "x": 546, "y": 12, "width": 175, "height": 0
+                            }
+                        },
+                        "roadinfo_widget": {
+                            "svg_template_path": "assets/audi/800x246/follow/road_name.svg",
+                            "layout": {
+                                "x": 0, "y": 238, "width": 440, "height": 0,
+                                "center_horizontally": true
+                            }
+                        }
+                    },
+                    "signpost": {
+                        "layout": {
+                            "width": 285,
+                            "height": 41
+                        },
+                        "style": {
+                            "style_id": "1",
+                            "style_config_variant": "day",
+                            "use_fallback_data": true,
+                            "display_multiple_entries_per_line": false
+                        }
+                    }
+                }
+            }
+        },
+        "cluster_overlay": {
+            "displayable": "Displayable_Cluster_Map_Route_Guidance",
+            "map_guidance_display_dsi_instance_id": 1
+        },
+        "hud": {
+            "displayable": "Displayable_Hud_Map",
+            "map_guidance_display_dsi_instance_id": 2
+        }
+    },
+    "zoom_levels_metric": [
+        { "scale": 3000,      "display_scale_x10": 300,   "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 5000,      "display_scale_x10": 500,   "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 7500,      "display_scale_x10": 750,   "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 10000,     "display_scale_x10": 1000,  "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 15000,     "display_scale_x10": 1500,  "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 20000,     "display_scale_x10": 2000,  "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 30000,     "display_scale_x10": 3000,  "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 40000,     "display_scale_x10": 4000,  "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 50000,     "display_scale_x10": 5000,  "display_scale_units": "m",  "max_tilt": 53 },
+        { "scale": 75000,     "display_scale_x10": 7500,  "display_scale_units": "m",  "max_tilt": 52 },
+        { "scale": 100000,    "display_scale_x10": 10,    "display_scale_units": "km", "max_tilt": 52 },
+        { "scale": 150000,    "display_scale_x10": 15,    "display_scale_units": "km", "max_tilt": 50 },
+        { "scale": 200000,    "display_scale_x10": 20,    "display_scale_units": "km", "max_tilt": 50 },
+        { "scale": 250000,    "display_scale_x10": 25,    "display_scale_units": "km", "max_tilt": 48 },
+        { "scale": 300000,    "display_scale_x10": 30,    "display_scale_units": "km", "max_tilt": 48 },
+        { "scale": 400000,    "display_scale_x10": 40,    "display_scale_units": "km", "max_tilt": 48 },
+        { "scale": 500000,    "display_scale_x10": 50,    "display_scale_units": "km", "max_tilt": 45 },
+        { "scale": 600000,    "display_scale_x10": 60,    "display_scale_units": "km", "max_tilt": 42 },
+        { "scale": 800000,    "display_scale_x10": 80,    "display_scale_units": "km", "max_tilt": 40 },
+        { "scale": 1000000,   "display_scale_x10": 100,   "display_scale_units": "km", "max_tilt": 38 },
+        { "scale": 1500000,   "display_scale_x10": 150,   "display_scale_units": "km", "max_tilt": 38 },
+        { "scale": 2000000,   "display_scale_x10": 200,   "display_scale_units": "km", "max_tilt": 35 },
+        { "scale": 3000000,   "display_scale_x10": 300,   "display_scale_units": "km", "max_tilt": 35 },
+        { "scale": 4000000,   "display_scale_x10": 400,   "display_scale_units": "km", "max_tilt": 32 },
+        { "scale": 5000000,   "display_scale_x10": 500,   "display_scale_units": "km", "max_tilt": 30 },
+        { "scale": 6000000,   "display_scale_x10": 600,   "display_scale_units": "km", "max_tilt": 28 },
+        { "scale": 7000000,   "display_scale_x10": 700,   "display_scale_units": "km", "max_tilt": 25 },
+        { "scale": 8000000,   "display_scale_x10": 800,   "display_scale_units": "km", "max_tilt": 22 },
+        { "scale": 9000000,   "display_scale_x10": 900,   "display_scale_units": "km", "max_tilt": 22 },
+        { "scale": 10000000,  "display_scale_x10": 1000,  "display_scale_units": "km", "max_tilt": 20 },
+        { "scale": 12500000,  "display_scale_x10": 1250,  "display_scale_units": "km", "max_tilt": 18 },
+        { "scale": 15000000,  "display_scale_x10": 1500,  "display_scale_units": "km", "max_tilt": 15 },
+        { "scale": 17500000,  "display_scale_x10": 1750,  "display_scale_units": "km", "max_tilt": 12 },
+        { "scale": 20000000,  "display_scale_x10": 2000,  "display_scale_units": "km", "max_tilt": 10 },
+        { "scale": 25000000,  "display_scale_x10": 2500,  "display_scale_units": "km", "max_tilt": 10 },
+        { "scale": 30000000,  "display_scale_x10": 3000,  "display_scale_units": "km", "max_tilt": 10 },
+        { "scale": 40000000,  "display_scale_x10": 4000,  "display_scale_units": "km", "max_tilt": 10 },
+        { "scale": 50000000,  "display_scale_x10": 5000,  "display_scale_units": "km", "max_tilt": 10 },
+        { "scale": 60000000,  "display_scale_x10": 6000,  "display_scale_units": "km", "max_tilt": 10 },
+        { "scale": 100000000, "display_scale_x10": 10000, "display_scale_units": "km", "max_tilt": 0 },
+        { "scale": 200000000, "display_scale_x10": 20000, "display_scale_units": "km", "max_tilt": 0 },
+        { "scale": 250000000, "display_scale_x10": 25000, "display_scale_units": "km", "max_tilt": 0 }
+    ],
+    "zoom_levels_imperial_us": [
+        { "scale": 3048,      "scale_int": 3000,      "display_scale_x10": 1000,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 4572,      "scale_int": 5000,      "display_scale_x10": 1500,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 7620,      "scale_int": 7500,      "display_scale_x10": 2500,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 9144,      "scale_int": 10000,     "display_scale_x10": 3000,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 13716,     "scale_int": 15000,     "display_scale_x10": 4500,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 18288,     "scale_int": 20000,     "display_scale_x10": 6000,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 27432,     "scale_int": 30000,     "display_scale_x10": 9000,  "display_scale_units": "ft", "max_tilt": 53 },
+        { "scale": 40233,     "scale_int": 40000,     "display_scale_x10": 10,    "display_scale_units": "qm", "max_tilt": 53 },
+        { "scale": 80467,     "scale_int": 75000,     "display_scale_x10": 20,    "display_scale_units": "qm", "max_tilt": 52 },
+        { "scale": 120700,    "scale_int": 120000,    "display_scale_x10": 30,    "display_scale_units": "qm", "max_tilt": 52 },
+        { "scale": 160934,    "scale_int": 170000,    "display_scale_x10": 10,    "display_scale_units": "mi", "max_tilt": 50 },
+        { "scale": 241402,    "scale_int": 250000,    "display_scale_x10": 15,    "display_scale_units": "mi", "max_tilt": 48 },
+        { "scale": 321868,    "scale_int": 350000,    "display_scale_x10": 20,    "display_scale_units": "mi", "max_tilt": 48 },
+        { "scale": 402336,    "scale_int": 400000,    "display_scale_x10": 25,    "display_scale_units": "mi", "max_tilt": 48 },
+        { "scale": 482803,    "scale_int": 500000,    "display_scale_x10": 30,    "display_scale_units": "mi", "max_tilt": 45 },
+        { "scale": 643737,    "scale_int": 600000,    "display_scale_x10": 40,    "display_scale_units": "mi", "max_tilt": 42 },
+        { "scale": 804672,    "scale_int": 800000,    "display_scale_x10": 50,    "display_scale_units": "mi", "max_tilt": 40 },
+        { "scale": 965606,    "scale_int": 900000,    "display_scale_x10": 60,    "display_scale_units": "mi", "max_tilt": 40 },
+        { "scale": 1287475,   "scale_int": 1250000,   "display_scale_x10": 80,    "display_scale_units": "mi", "max_tilt": 38 },
+        { "scale": 1609344,   "scale_int": 1600000,   "display_scale_x10": 100,   "display_scale_units": "mi", "max_tilt": 38 },
+        { "scale": 2414016,   "scale_int": 2500000,   "display_scale_x10": 150,   "display_scale_units": "mi", "max_tilt": 35 },
+        { "scale": 3218688,   "scale_int": 3000000,   "display_scale_x10": 200,   "display_scale_units": "mi", "max_tilt": 35 },
+        { "scale": 4023360,   "scale_int": 4000000,   "display_scale_x10": 250,   "display_scale_units": "mi", "max_tilt": 32 },
+        { "scale": 4828032,   "scale_int": 5000000,   "display_scale_x10": 300,   "display_scale_units": "mi", "max_tilt": 30 },
+        { "scale": 6437376,   "scale_int": 6000000,   "display_scale_x10": 400,   "display_scale_units": "mi", "max_tilt": 28 },
+        { "scale": 8046720,   "scale_int": 8000000,   "display_scale_x10": 500,   "display_scale_units": "mi", "max_tilt": 22 },
+        { "scale": 9656064,   "scale_int": 10000000,  "display_scale_x10": 600,   "display_scale_units": "mi", "max_tilt": 20 },
+        { "scale": 11265410,  "scale_int": 11000000,  "display_scale_x10": 700,   "display_scale_units": "mi", "max_tilt": 19 },
+        { "scale": 12874750,  "scale_int": 12500000,  "display_scale_x10": 800,   "display_scale_units": "mi", "max_tilt": 18 },
+        { "scale": 14484100,  "scale_int": 14000000,  "display_scale_x10": 900,   "display_scale_units": "mi", "max_tilt": 16 },
+        { "scale": 16093440,  "scale_int": 15000000,  "display_scale_x10": 1000,  "display_scale_units": "mi", "max_tilt": 15 },
+        { "scale": 20116800,  "scale_int": 20000000,  "display_scale_x10": 1250,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 24140160,  "scale_int": 25000000,  "display_scale_x10": 1500,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 28163520,  "scale_int": 30000000,  "display_scale_x10": 1750,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 32186880,  "scale_int": 35000000,  "display_scale_x10": 2000,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 40233600,  "scale_int": 40000000,  "display_scale_x10": 2500,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 48280320,  "scale_int": 50000000,  "display_scale_x10": 3000,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 64373760,  "scale_int": 60000000,  "display_scale_x10": 4000,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 96560640,  "scale_int": 100000000, "display_scale_x10": 6000,  "display_scale_units": "mi", "max_tilt": 0 },
+        { "scale": 160934400, "scale_int": 150000000, "display_scale_x10": 10000, "display_scale_units": "mi", "max_tilt": 0 },
+        { "scale": 241401600, "scale_int": 250000000, "display_scale_x10": 15000, "display_scale_units": "mi", "max_tilt": 0 }
+    ],
+    "zoom_levels_imperial_uk": [
+        { "scale": 2743,      "scale_int": 3000,      "display_scale_x10": 300,   "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 4572,      "scale_int": 5000,      "display_scale_x10": 500,   "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 6858,      "scale_int": 7500,      "display_scale_x10": 750,   "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 9144,      "scale_int": 10000,     "display_scale_x10": 1000,  "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 13716,     "scale_int": 15000,     "display_scale_x10": 1500,  "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 18288,     "scale_int": 20000,     "display_scale_x10": 2000,  "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 27432,     "scale_int": 30000,     "display_scale_x10": 3000,  "display_scale_units": "yd", "max_tilt": 53 },
+        { "scale": 40233,     "scale_int": 40000,     "display_scale_x10": 10,    "display_scale_units": "qm", "max_tilt": 53 },
+        { "scale": 80467,     "scale_int": 75000,     "display_scale_x10": 20,    "display_scale_units": "qm", "max_tilt": 52 },
+        { "scale": 120700,    "scale_int": 120000,    "display_scale_x10": 30,    "display_scale_units": "qm", "max_tilt": 52 },
+        { "scale": 160934,    "scale_int": 170000,    "display_scale_x10": 10,    "display_scale_units": "mi", "max_tilt": 50 },
+        { "scale": 241402,    "scale_int": 250000,    "display_scale_x10": 15,    "display_scale_units": "mi", "max_tilt": 48 },
+        { "scale": 321868,    "scale_int": 350000,    "display_scale_x10": 20,    "display_scale_units": "mi", "max_tilt": 48 },
+        { "scale": 402336,    "scale_int": 400000,    "display_scale_x10": 25,    "display_scale_units": "mi", "max_tilt": 48 },
+        { "scale": 482803,    "scale_int": 500000,    "display_scale_x10": 30,    "display_scale_units": "mi", "max_tilt": 45 },
+        { "scale": 643737,    "scale_int": 600000,    "display_scale_x10": 40,    "display_scale_units": "mi", "max_tilt": 42 },
+        { "scale": 804672,    "scale_int": 800000,    "display_scale_x10": 50,    "display_scale_units": "mi", "max_tilt": 40 },
+        { "scale": 965606,    "scale_int": 900000,    "display_scale_x10": 60,    "display_scale_units": "mi", "max_tilt": 40 },
+        { "scale": 1287475,   "scale_int": 1250000,   "display_scale_x10": 80,    "display_scale_units": "mi", "max_tilt": 38 },
+        { "scale": 1609344,   "scale_int": 1600000,   "display_scale_x10": 100,   "display_scale_units": "mi", "max_tilt": 38 },
+        { "scale": 2414016,   "scale_int": 2500000,   "display_scale_x10": 150,   "display_scale_units": "mi", "max_tilt": 35 },
+        { "scale": 3218688,   "scale_int": 3000000,   "display_scale_x10": 200,   "display_scale_units": "mi", "max_tilt": 35 },
+        { "scale": 4023360,   "scale_int": 4000000,   "display_scale_x10": 250,   "display_scale_units": "mi", "max_tilt": 32 },
+        { "scale": 4828032,   "scale_int": 5000000,   "display_scale_x10": 300,   "display_scale_units": "mi", "max_tilt": 30 },
+        { "scale": 6437376,   "scale_int": 6000000,   "display_scale_x10": 400,   "display_scale_units": "mi", "max_tilt": 28 },
+        { "scale": 8046720,   "scale_int": 8000000,   "display_scale_x10": 500,   "display_scale_units": "mi", "max_tilt": 22 },
+        { "scale": 9656064,   "scale_int": 10000000,  "display_scale_x10": 600,   "display_scale_units": "mi", "max_tilt": 20 },
+        { "scale": 11265410,  "scale_int": 11000000,  "display_scale_x10": 700,   "display_scale_units": "mi", "max_tilt": 19 },
+        { "scale": 12874750,  "scale_int": 12500000,  "display_scale_x10": 800,   "display_scale_units": "mi", "max_tilt": 18 },
+        { "scale": 14484100,  "scale_int": 14000000,  "display_scale_x10": 900,   "display_scale_units": "mi", "max_tilt": 16 },
+        { "scale": 16093440,  "scale_int": 15000000,  "display_scale_x10": 1000,  "display_scale_units": "mi", "max_tilt": 15 },
+        { "scale": 20116800,  "scale_int": 20000000,  "display_scale_x10": 1250,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 24140160,  "scale_int": 25000000,  "display_scale_x10": 1500,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 28163520,  "scale_int": 30000000,  "display_scale_x10": 1750,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 32186880,  "scale_int": 35000000,  "display_scale_x10": 2000,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 40233600,  "scale_int": 40000000,  "display_scale_x10": 2500,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 48280320,  "scale_int": 50000000,  "display_scale_x10": 3000,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 64373760,  "scale_int": 60000000,  "display_scale_x10": 4000,  "display_scale_units": "mi", "max_tilt": 10 },
+        { "scale": 96560640,  "scale_int": 100000000, "display_scale_x10": 6000,  "display_scale_units": "mi", "max_tilt": 0 },
+        { "scale": 160934400, "scale_int": 150000000, "display_scale_x10": 10000, "display_scale_units": "mi", "max_tilt": 0 },
+        { "scale": 241401600, "scale_int": 250000000, "display_scale_x10": 15000, "display_scale_units": "mi", "max_tilt": 0 }
+    ],
+    "ccp_icon": {
+        "model_file": "assets/audi/ccp/ccp.obj",
+        "texture_file": "assets/audi/ccp/ccp.png",
+        "scale": 5,
+        "distance_scale_min": 0.75,
+        "distance_scale_max": 1.2
+    },
+    "font_path": "assets/audi/fonts/AudiTypeDisplayHigh-Normal.ttf",
+    "onlinenav": {
+        "original_geometry_threshold_m": 1.0,
+        "refresh_tour_rectangles_timeout": 2000
+    },
+    "guidance_event_configuration": {
+        "traffic_items":30,
+        "turn_items":10,
+        "stopover_items":10,
+        "poi_items":10,
+        "min_distance_to_merged_maneuver_m": 2000,
+        "max_merged_maneuver_length_m": 2000,
+        "allowed_traffic_warner_classes": [1,2,3,4,5],
+        "allowed_traffic_warner_classes_for_voice_notifications": [2,4]
+    },
+    "dynamic_guidance": {
+        "route_tta_recommended_threshold": 300,
+        "stick_to_route_override_min_traffic_delay_absolute": 900,
+        "traffic_delay_announcement": 900,
+        "traffic_delay_reset": 600,
+        "traffic_delay_hysteresis": 600,
+        "route_alternatives_enabled": true,
+        "infeasible_alternatives_fallback_enabled": true,
+        "alternatives_calculation_policy":[
+                {"type":"FASTEST", "desired_number":2}
+        ],
+        "percentage_of_blocked_route_for_infeasible_alt": 30
+    },
+    "cluster": {
+        "guidanceviewstyle_variant_1": {
+            "annotations": {"enabled": true, "frame_id": 1, "frame_alpha_id": 2 },
+            "scenes": [ "follow", "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 858, "height": 322 },
+            "view_port": { "width": 294, "height": 320, "x": 0, "y": 0 },
+            "safe_frame": { "width": 214, "height": 171, "x": 40, "y": 50 },
+            "intersection_mode": {
+                "scheme_name": "ism.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.4,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 120,
+                "action_camera_height_m"             : -5,
+                "action_camera_tilt_deg"             : 15,
+                "action_camera_vertical_fov_deg"     : 30,
+                "animation_duration_ms"              : 1500
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 53,
+                "prepare_camera_height_m"            : 13,
+                "prepare_camera_tilt_deg"            : 15,
+                "prepare_camera_vertical_fov_deg"    : 30,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300,
+                "camera_shift_options": {
+                    "lane_shift_size": 3.5,
+                    "max_fitted_lanes": 6
+                }
+            },
+            "follow_mode":
+            {
+                "svg_template_path"     : "294x320/follow/follow.svg",
+                "maneuver_arrows_path"  : "file:///294x320/follow/arrows",
+                "maneuver_flags_path"   : "file:///294x320/follow/flags",
+                "background_image"      : ""
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 26, "height": 137, "x": 254, "y": 84 },
+                    "image_path"        : "assets/audi/294x320/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                },
+                "dtm_widget_enabled"    : true,
+                "dtm_widget" : {
+                    "svg_template_path": "assets/audi/294x320/dtm.svg",
+                    "background_image" : "assets/audi/294x320/dtm_background.png",
+                    "layout" : {
+                        "width": 294,
+                        "height": 320,
+                        "x": 0,
+                        "y": 0
+                    }
+                }
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 294, "height": 39, "x": 0, "y": 228 },
+                "lane_images_path"              : "assets/audi/294x320/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 294, "height": 111, "x": 0, "y": 221 },
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "max_icon_count"                : 7,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/294x320/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 4.5,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/294x320/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/294x320/destination/destination_offroad",
+            "destination_left_image": "assets/audi/294x320/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/294x320/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/294x320/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/294x320/u-turn/u_turn_right"
+        },
+        "guidanceviewstyle_variant_2": {
+            "annotations": {"enabled": true, "frame_id": 1, "frame_alpha_id": 2 },
+            "scenes": [ "follow", "destination", "compass" ],
+            "resolution": { "width": 858, "height": 322 },
+            "view_port": { "width": 294, "height": 320, "x": 0, "y": 0 },
+            "follow_mode":
+            {
+                "svg_template_path"     : "294x320/follow/follow.svg",
+                "maneuver_arrows_path"  : "file:///294x320/follow/arrows",
+                "maneuver_flags_path"   : "file:///294x320/follow/flags",
+                "background_image"      : ""
+            },
+            "compass": {
+                "image_path" : "assets/audi/294x320/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "destination_onroad_image": "assets/audi/294x320/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/294x320/destination/destination_offroad",
+            "destination_left_image": "assets/audi/294x320/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/294x320/destination/destination_onroad_right"
+        },
+        "guidanceviewstyle_variant_3": {
+            "annotations": {"enabled": true, "frame_id": 15, "frame_alpha_id": 16 },
+            "scenes": [ "follow", "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 858, "height": 322 },
+            "view_port": { "width": 429, "height": 302, "x": 0, "y": 0 },
+            "safe_frame": { "width": 349, "height": 209, "x": 40, "y": 50 },
+            "intersection_mode": {
+                "scheme_name": "ism.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.4,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 120,
+                "action_camera_height_m"             : -5,
+                "action_camera_tilt_deg"             : 15,
+                "action_camera_vertical_fov_deg"     : 30,
+                "animation_duration_ms"              : 1500
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 53,
+                "prepare_camera_height_m"            : 13,
+                "prepare_camera_tilt_deg"            : 15,
+                "prepare_camera_vertical_fov_deg"    : 30,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300
+            },
+            "follow_mode":
+            {
+                "svg_template_path"     : "429x302/follow/follow_smode.svg",
+                "maneuver_arrows_path"  : "file:///429x302/follow/arrows",
+                "maneuver_flags_path"   : "file:///429x302/follow/flags",
+                "background_image"      : "assets/audi/429x302/follow/background.png"
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 26, "height": 137, "x": 389, "y": 134 },
+                    "image_path"        : "assets/audi/429x302/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                },
+                "dtm_widget_enabled"    : true,
+                "dtm_widget" : {
+                    "svg_template_path": "assets/audi/429x302/dtm.svg",
+                    "background_image" : "assets/audi/429x302/dtm_background.png",
+                    "layout" : {
+                        "width": 429,
+                        "height": 302,
+                        "x": 0,
+                        "y": 0
+                    }
+                }
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 429, "height": 39, "x": 0, "y": 265 },
+                "lane_images_path"              : "assets/audi/429x302/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 383, "height": 43, "x": 0, "y": 259 },
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "max_icon_count"                : 8,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/429x302/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 4.5,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/429x302/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/429x302/destination/destination_offroad",
+            "destination_left_image": "assets/audi/429x302/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/429x302/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/429x302/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/429x302/u-turn/u_turn_right"
+        },
+        "guidanceviewstyle_variant_4": {
+            "annotations": {"enabled": true, "frame_id": 15, "frame_alpha_id": 16 },
+            "scenes": [ "follow", "destination", "compass" ],
+            "resolution": { "width": 858, "height": 322 },
+            "view_port": { "width": 429, "height": 302, "x": 0, "y": 0 },
+            "follow_mode":
+            {
+                "svg_template_path"     : "429x302/follow/follow_smode_lanes.svg",
+                "maneuver_arrows_path"  : "file:///429x302/follow/arrows",
+                "maneuver_flags_path"   : "file:///429x302/follow/flags",
+                "background_image"      : ""
+            },
+            "compass": {
+                "image_path" : "assets/audi/429x302/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "destination_onroad_image": "assets/audi/429x302/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/429x302/destination/destination_offroad",
+            "destination_left_image": "assets/audi/429x302/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/429x302/destination/destination_onroad_right"
+        },
+        "guidanceviewstyle_variant_5": {
+            "overlay_image": "assets/audi/800x246/map_stencil_mask_street_view.png",
+            "scenes": [ "extended_follow", "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 800, "height": 246 },
+            "view_port": { "width": 800, "height": 246, "x": 0, "y": 0 },
+            "safe_frame": { "width": 400, "height": 129, "x": 200, "y": 60 },
+            "intersection_mode": {
+                "scheme_name": "ism.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.4,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 110,
+                "action_camera_height_m"             : 10,
+                "action_camera_tilt_deg"             : 17,
+                "action_camera_vertical_fov_deg"     : 25,
+                "animation_duration_ms"              : 1500
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 70,
+                "prepare_camera_height_m"            : 22,
+                "prepare_camera_tilt_deg"            : 17,
+                "prepare_camera_vertical_fov_deg"    : 25,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300
+            },
+            "extended_follow_mode": {
+                "maneuver_overlay_enabled": true,
+                "maneuver_overlay_variant_id": "follow",
+                "laneview_enabled": true,
+                "junction_mode": {
+                    "scheme_name"                        : "lane-view.json",
+                    "action_camera_distance_m"           : 70,
+                    "action_camera_height_m"             : 22,
+                    "action_camera_tilt_deg"             : 17,
+                    "action_camera_vertical_fov_deg"     : 25
+                }
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 26, "height": 137, "x": 600, "y": 78 },
+                    "image_path"        : "assets/audi/800x246/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                },
+                "signpost_enabled": true,
+                "signpost": {
+                    "layout": {
+                        "width": 285,
+                        "height": 41,
+                        "x": 257.5,
+                        "y": 12,
+                        "center_horizontally": true,
+                        "center_vertically": false,
+                        "adjust_visible_area": false
+                    },
+                    "style": {
+                        "style_id": "1",
+                        "style_config_variant": "day",
+                        "use_fallback_data": true,
+                        "display_multiple_entries_per_line": false
+                    }
+                },
+                "dtd_widget_enabled": true,
+                "dtd_widget": {
+                    "svg_template_path" : "assets/audi/800x246/follow/follow_dtd.svg",
+                    "icons_path"        : "file:///800x246/follow/flags",
+                    "layout": {
+                        "width": 166, "height": 40, "x": 80, "y": 12,
+                        "center_horizontally": false,
+                        "center_vertically": false
+                    }
+                },
+                "dtm_widget_enabled": true,
+                "dtm_widget": {
+                    "svg_template_path" : "assets/audi/800x246/follow/follow_dtm.svg",
+                    "icons_path"        : "file:///800x246/follow/arrows",
+                    "layout": {
+                        "width": 175, "height": 40, "x": 546, "y": 12,
+                        "center_horizontally": false,
+                        "center_vertically": false
+                    }
+                },
+                "variants": [
+                    {
+                        "id": "follow",
+                        "signpost_enabled": false,
+                        "bargraph_enabled": false
+                    }
+                ]
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 505, "height": 57, "x": 147, "y": 201 },
+                "lane_images_path"              : "assets/audi/800x246/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 505, "height": 57, "x": 147, "y": 189 },
+                "max_icon_count"                : 6,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/800x246/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 4.5,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/800x246/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/800x246/destination/destination_offroad",
+            "destination_left_image": "assets/audi/800x246/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/800x246/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/800x246/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/800x246/u-turn/u_turn_right"
+        },
+        "guidanceviewstyle_variant_6": {
+            "scenes": [ "follow", "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 480, "height": 240 },
+            "view_port": { "width": 210, "height": 136, "x": 0, "y": 34 },
+            "safe_frame": { "width": 163, "height": 93, "x": 17, "y": 10 },
+            "intersection_mode": {
+                "scheme_name": "ism.hud.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.0,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "follow_mode":
+            {
+                "svg_template_path"     : "210x136/follow/follow_hud.svg",
+                "maneuver_arrows_path"  : "file:///210x136/follow/arrows",
+                "maneuver_flags_path"   : "file:///210x136/follow/flags"
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 25,
+                "prepare_camera_height_m"            : 13,
+                "prepare_camera_tilt_deg"            : 15,
+                "prepare_camera_vertical_fov_deg"    : 25,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300,
+                "camera_shift_options": {
+                    "lane_shift_size": 3,
+                    "max_fitted_lanes": 6
+                }
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 95,
+                "action_camera_height_m"             : -5,
+                "action_camera_tilt_deg"             : 15,
+                "action_camera_vertical_fov_deg"     : 25,
+                "animation_duration_ms"              : 1500
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 23, "height": 106, "x": 180, "y": 0 },
+                    "image_path"        : "assets/audi/210x136/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                }
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 210, "height": 28, "x": 0, "y": 103 },
+                "lane_images_path"              : "assets/audi/210x136/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 210, "height": 28, "x": 0, "y": 103 },
+                "max_icon_count"                : 6,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/210x136/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 3.25,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/210x136/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/210x136/destination/destination_offroad",
+            "destination_left_image": "assets/audi/210x136/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/210x136/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/210x136/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/210x136/u-turn/u_turn_right"
+        },
+        "guidanceviewstyle_variant_7": {
+            "scenes": [ "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 480, "height": 240 },
+            "view_port": { "width": 210, "height": 136, "x": 0, "y": 34 },
+            "safe_frame": { "width": 163, "height": 93, "x": 17, "y": 10 },
+            "intersection_mode": {
+                "scheme_name": "ism.hud.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.0,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 95,
+                "action_camera_height_m"             : -5,
+                "action_camera_tilt_deg"             : 15,
+                "action_camera_vertical_fov_deg"     : 25,
+                "animation_duration_ms"              : 1500
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 25,
+                "prepare_camera_height_m"            : 13,
+                "prepare_camera_tilt_deg"            : 15,
+                "prepare_camera_vertical_fov_deg"    : 25,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300,
+                "camera_shift_options": {
+                    "lane_shift_size": 3,
+                    "max_fitted_lanes": 6
+                }
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 23, "height": 106, "x": 180, "y": 0 },
+                    "image_path"        : "assets/audi/210x136/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                }
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 210, "height": 28, "x": 0, "y": 103 },
+                "lane_images_path"              : "assets/audi/210x136/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 210, "height": 28, "x": 0, "y": 103 },
+                "max_icon_count"                : 6,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/210x136/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 4.5,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/210x136/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/210x136/destination/destination_offroad",
+            "destination_left_image": "assets/audi/210x136/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/210x136/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/210x136/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/210x136/u-turn/u_turn_right"
+        },
+        "guidanceviewstyle_variant_8": {
+            "scenes": [ "follow", "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 480, "height": 240 },
+            "view_port": { "width": 172, "height": 118, "x": 0, "y": 0 },
+            "safe_frame": { "width": 150, "height": 90, "x": 11, "y": 0 },
+            "intersection_mode": {
+                "scheme_name": "ism.hud.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.4,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "follow_mode":
+            {
+                "svg_template_path"     : "172x118/follow/follow_hud.svg",
+                "maneuver_arrows_path"  : "file:///172x118/follow/arrows",
+                "maneuver_flags_path"   : "file:///172x118/follow/flags",
+                "background_image"      : ""
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 95,
+                "action_camera_height_m"             : -5,
+                "action_camera_tilt_deg"             : 15,
+                "action_camera_vertical_fov_deg"     : 25,
+                "animation_duration_ms"              : 1500
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 25,
+                "prepare_camera_height_m"            : 13,
+                "prepare_camera_tilt_deg"            : 15,
+                "prepare_camera_vertical_fov_deg"    : 25,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300,
+                "camera_shift_options": {
+                    "lane_shift_size": 3,
+                    "max_fitted_lanes": 6
+                }
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 11, "height": 80, "x": 157, "y": 0 },
+                    "image_path"        : "assets/audi/172x118/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                }
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 172, "height": 28, "x": 0, "y": 90 },
+                "lane_images_path"              : "assets/audi/172x118/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 172, "height": 28, "x": 0, "y": 90 },
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "max_icon_count"                : 5,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/172x118/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 4.5,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/172x118/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/172x118/destination/destination_offroad",
+            "destination_left_image": "assets/audi/172x118/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/172x118/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/172x118/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/172x118/u-turn/u_turn_right"
+        },
+        "guidanceviewstyle_variant_9": {
+            "scenes": [ "prepare", "action_ism", "action_3d_junction", "uturn", "destination", "compass" ],
+            "resolution": { "width": 480, "height": 240 },
+            "view_port": { "width": 172, "height": 118, "x": 0, "y": 0 },
+            "safe_frame": { "width": 150, "height": 90, "x": 11, "y": 0 },
+            "intersection_mode": {
+                "scheme_name": "ism.hud.json",
+                "tilt_angle": 45,
+                "start_zoom_level": 16.4,
+                "transform_center_x_factor": 0.5,
+                "transform_center_y_factor": 0.5
+            },
+            "junction_mode": {
+                "scheme_name"                        : "exit-view.json",
+                "frame_rate_fps"                     : 15,
+                "action_camera_distance_m"           : 95,
+                "action_camera_height_m"             : -5,
+                "action_camera_tilt_deg"             : 15,
+                "action_camera_vertical_fov_deg"     : 25,
+                "animation_duration_ms"              : 1500
+            },
+            "laneassist_mode": {
+                "scheme_name"                        : "prepare-view.json",
+                "prepare_camera_distance_m"          : 25,
+                "prepare_camera_height_m"            : 13,
+                "prepare_camera_tilt_deg"            : 15,
+                "prepare_camera_vertical_fov_deg"    : 25,
+                "transition_point_show_m"            : 400,
+                "lane_show_buffer_m"                 : 300,
+                "camera_shift_options": {
+                    "lane_shift_size": 3,
+                    "max_fitted_lanes": 6
+                }
+            },
+            "blurred_frame_radius": 0.3,
+            "maneuver_overlay": {
+                "bargraph_enabled": true,
+                "bargraph": {
+                    "box"               : { "width": 11, "height": 80, "x": 157, "y": 0 },
+                    "image_path"        : "assets/audi/172x118/bargraph",
+                    "filename_template" : "bargraph_%02u.png",
+                    "max_image_index"   : 16
+                }
+            },
+            "lanewidget_enabled": true,
+            "lanewidget": {
+                "box"                           : { "width": 172, "height": 28, "x": 0, "y": 90 },
+                "lane_images_path"              : "assets/audi/172x118/lane",
+                "direction_icon_directory"      : "arrows/3",
+                "direction_icon_file_extension" : "png",
+                "filename_ellipsis_right"       : "lane_widget_points.png",
+                "filename_ellipsis_left"        : "lane_widget_points.png",
+                "filename_bus_lane"             : "buslane.png",
+                "filename_static_background"    : "lane_widget_background.png",
+                "static_background_box"         : { "width": 172, "height": 28, "x": 0, "y": 90 },
+                "filename_solid_divider"        : "dividing_lane_left.png",
+                "filename_dashed_divider"       : "dividing_lane.png",
+                "max_icon_count"                : 5,
+                "max_combined_arrow_count"      : 3
+            },
+            "compass": {
+                "image_path" : "assets/audi/172x118/compass",
+                "filename_template" : "compass_%02u"
+            },
+            "ccp_icon": {
+                "model_file": "assets/audi/ccp/ccp.obj",
+                "texture_file": "assets/audi/ccp/ccp.png",
+                "scale": 4.5,
+                "distance_scale_min": 0.75,
+                "distance_scale_max": 1.2
+            },
+            "destination_onroad_image": "assets/audi/172x118/destination/destination_onroad",
+            "destination_offroad_image": "assets/audi/172x118/destination/destination_offroad",
+            "destination_left_image": "assets/audi/172x118/destination/destination_onroad_left",
+            "destination_right_image": "assets/audi/172x118/destination/destination_onroad_right",
+            "uturn_left_image": "assets/audi/172x118/u-turn/u_turn_left",
+            "uturn_right_image": "assets/audi/172x118/u-turn/u_turn_right"
+        }
+    },
+    "icon_sizes": {
+        "very_small": 20,
+        "small": 30,
+        "medium": 40,
+        "large": 77,
+        "very_large": 140
+    },
+    "harp_map": {
+        "config_paths": "config/audi/harp/sparta:config/harp/sparta/sparta_audi_eur:config/harp/sparta:config/harp/sparta/common",
+        "asset_paths": "assets/audi/eur:assets/audi:assets/harp/magma:assets/harp/geoviz:assets/harp/HereNaviLib:assets/harp/junctionview:.",
+        "icons_config": "harp/sparta/icons_configuration.json",
+        "ram_tile_cache_limit_mb": 160,
+        "vram_limit_mb": 230,
+        "ram_tile_cache_limit_low_mem_mb": 120,
+        "vram_limit_low_mem_mb": 200,
+        "fonts":[
+            {
+                "name": "AudiTypeDisplayHigh-Bold",
+                "path": "fonts/AudiTypeDisplayHigh-Bold.ttf"
+            },
+            {
+                "name": "AudiTypeDisplayHigh-Light",
+                "path": "fonts/AudiTypeDisplayHigh-Light.ttf"
+            },
+            {
+                "name": "AudiTypeDisplayHigh-Normal",
+                "path": "fonts/AudiTypeDisplayHigh-Normal.ttf"
+            },
+            {
+                "name": "",
+                "path": "fonts/AudiTypeDisplayHigh-Normal.ttf"
+            }
+        ]
+    },
+    "satellite_configuration"                     : "satellite_configuration.json",
+    "signpost_styles_configuration"               : "signpost_styles_configuration.json",
+    "ev_configuration"                            : "ev_configuration.json",
+    "web_apps_configuration"                      : "web_apps_configuration.json",
+    "fill_ev_range_without_inner_polygon"         : false,
+    "route_overview_configuration_day"            : "unified-roads-routeoverview.day.json",
+    "route_overview_hybrid_configuration_day"     : "unified-roads-routeoverview.hybrid.day.json",
+    "route_overview_configuration_night"          : "unified-roads-routeoverview.night.json",
+    "route_overview_hybrid_configuration_night"   : "unified-roads-routeoverview.hybrid.night.json"
+}

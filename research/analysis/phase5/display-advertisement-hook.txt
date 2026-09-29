@@ -1,0 +1,34 @@
+P3695 display advertisement seam
+
+Observed dio_manager path:
+
+  CDIOManager::getDisplays @ 0x1db510
+    -> createDisplaysDictionary @ 0x1d9be0
+    -> one-entry CFArray/dictionary
+
+The current getDisplays function is a normal exported C++ text symbol in
+dio_manager. Its direct internal caller recovered in this phase is
+infoRequestDisplays @ 0x1db6e0. The AirPlay server registration path is
+separate: CAirPlayServer::registerDelegates copies a 0xa0-byte delegate and
+calls AirPlayReceiverServerSetDelegate through the libairplay PLT.
+
+No direct call from libairplay to CDIOManager::getDisplays was recovered. The
+display descriptor is likely supplied through a delegate/property callback or
+another dio_manager-owned request path, but the exact callback field is not
+identified. Therefore:
+
+  who calls getDisplays for AirPlay / callback relationship: UNKNOWN
+  getDisplays direct interposition from another process: NOT PROVEN
+  returned-array mutation after getDisplays: PLAUSIBLE only inside a hook that
+    actually reaches the function
+  replacing the AirPlay server delegate: POSSIBLE FUNCTION HOOK
+
+AirPlayInfoArrayAddScreenDisplay is exported by libairplay but is not imported
+by dio_manager; dio_manager's recovered one-entry helper does not call it.
+Therefore interposing that helper alone does not prove that the stock
+advertisement gains a second descriptor.
+
+Best advertisement seam: intercept the callback/delegate/property request that
+produces the displays CFArray, after its exact field is identified. The second
+best is an AirPlayReceiverServer delegate/control hook. A dio_manager-only
+getDisplays replacement is not yet proven to affect the iOS /info response.

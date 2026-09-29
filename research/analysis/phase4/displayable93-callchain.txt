@@ -1,0 +1,61 @@
+P3695 Phase 4: displayable 93 call-chain evidence
+
+Conclusion: exact creator/writer of Displayable_External_Smarthphone (93) is UNKNOWN.
+The target selection is configuration-driven with STRONG EVIDENCE, but neither
+libairplay.so nor gal contains a recovered display-creation call for 93.
+
+1. Configuration inputs
+
+smartphone_integration/etc/dio_manager.json:
+  screen.display = Driver_Display
+  screen.displayable = Displayable_External_Smarthphone
+  screen.displayableID = 93
+  screen.layer = Layer_Media_Base
+  screenResolutionWidth = 1540
+  screenResolutionHeight = 720
+
+smartphone_integration/etc/gal.json:
+  video.sink.renderer.displayableID = 93
+  video.sink.renderer.esogfx.displayable = Displayable_External_Smarthphone
+  video.sink.renderer.esogfx.decoderCreationRetries = 2
+
+These two files independently place 93 at the AirPlay/GAL video sink boundary.
+
+2. Recovered runtime path
+
+libairplay.so:
+  ScreenStreamCreate
+    -> IVIdeoAbstraction::createVideoImpl
+    -> CESOGfxVideoImpl / CESOGfxVideo
+    -> gfx::Decoder::create and decoder/video feed callbacks
+
+The inspected libairplay dynamic imports include decoder/video implementation
+symbols, but no dint_create_displayable, dint_get_surface, gfx::IpteConnection,
+or display-manager registration symbol. Therefore the binary does not prove that
+libairplay itself creates displayable 93.
+
+gal:
+  imports gfx::Decoder and VideoSink methods, including
+  VideoSink::addSupportedConfiguration and VideoSink::setVideoFocus.
+  It does not import the libdisplayinit dint_create_displayable family in the
+  inspected dynamic-symbol set. GAL therefore proves renderer/sink ownership of
+  the configured target, not registration ownership.
+
+3. Proven negative/unknown boundary
+
+PROVEN: the integer 93 enters stock renderer selection through dio_manager.json
+and gal.json.
+PROVEN: the stock screen is configured for Driver_Display and Layer_Media_Base.
+UNKNOWN: which process registers the IPTE/displayable object named
+Displayable_External_Smarthphone.
+UNKNOWN: which process writes the surface after decoder output.
+UNKNOWN: whether displayable 93 is pre-created by DisplayManager, created by a
+GAL/decoder service, or created through an unobserved client library.
+
+4. Implication for a second target
+
+The observed renderer has per-sink displayableID and esogfx.displayable values,
+which makes a second instance PLAUSIBLE. No recovered setter, second config
+instance, or exact constructor signature proves that a second CESOGfxVideo can
+be configured at runtime. A second target also requires a registered displayable
+name, not merely an arbitrary integer.

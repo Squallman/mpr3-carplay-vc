@@ -1,0 +1,31 @@
+P3695 cluster video encoding API
+
+PROVEN interface contract from the EMS table
+(esofw/share/ems_tables.zip, asi.VideoEncoding.ems_table.json):
+
+  method 0: setActiveDisplayable(displayID: enum, displayable: i32)
+             displayID CLUSTER=4, HUD=5
+  method 3: same; PRIMARY_DEFAULT=0, CLUSTER=4, HUD=5, PARKPILO=-16
+  method 6: same; CLUSTER_MOST=0, HUD_MOST=1, CLUSTER_ETH=2,
+             HUD_ETH=3, MAX=4
+  method 9: same; MOST_CLUSTER=0, ETHERNET_CLUSTER=1, MOST_HUD=2,
+             ETHERNET_HUD=3, MOST_CLUSTER_MINOR=4,
+             ETHERNET_CLUSTER_MINOR=5, MAX=6
+
+The entries are interface/version variants. This proves argument order and
+multiple cluster transport endpoints; it does not prove which is active in
+P3695 vehicle configuration.
+
+vesdt is a diagnostic/generated-proxy client. Its strings include:
+  "Usage: versedt set_displayable DISPLAYID DISPLAYABLE"
+  generated IVideoEncoding proxy types and
+  call_struct_DisplayID_I32IVideoEncodingRequest.
+This proves a client-side proxy shape, but no native-navigation call site with
+a constant displayable was proven.
+
+videoencoderservice is proven to consume an integer displayable ID through
+IpTeConnection::getDisplayable, dimension validation, encoder creation, and
+CEncoder::feed(IpteDisplayable). No whitelist/owner check was proven.
+
+Normal native cluster caller: UNKNOWN. “Arbitrary ID accepted by policy”:
+UNKNOWN, despite the i32 RPC argument.

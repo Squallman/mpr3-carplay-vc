@@ -1,0 +1,18 @@
+P3695 libairplay.so AirPlayGetFeatures
+
+Function: AirPlayGetFeatures @ 0x49d40.
+
+The function calls CFObjectGetPropertyInt64Sync using a configuration/global
+object and then ORs the result with the assembled literal:
+
+  mov x1, #0x280
+  movk x1, #0x404, lsl #16
+  movk x1, #0x61, lsl #32
+  orr x0, x0, x1
+
+Literal mask: 0x6104040280.
+
+The individual feature meanings are not proven by this artifact. No conclusion
+is made that any bit is AltScreen. The function does prove that the returned
+mask is not solely a config value: at least 0x6104040280 is unconditionally
+forced into the result.

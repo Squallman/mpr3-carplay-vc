@@ -1,0 +1,52 @@
+P3695 type-110 screen lifecycle evidence
+
+AirPlayReceiverSessionScreen_Create @ libairplay.so:0x5c950
+  mov x1,#0x340; calloc(1, 0x340); initialize fd at +0x320 to -1;
+  clear byte +0x33c; return allocated pointer through out-parameter.
+  PROVEN: this is a separately allocated nested screen object.
+
+Observed offsets:
+  +0x000 stream descriptor/type value written by Screen_Setup
+  +0x024/+0x038 zeroed by StartSession; +0x040 copied from a constant
+  +0x0c8 AES/crypto context; +0x1e8 AES state flag
+  +0x1f0 security-present flag; +0x2f8 32-byte key area
+  +0x318 packet/security state; +0x320 socket fd
+  +0x328 ScreenStream pointer; +0x330 delegate callback/context
+  +0x338 screen state; +0x33c atomic activity/stop byte
+  Allocation size is 0x340 bytes. Exact C++ type layout beyond these fields
+  is UNKNOWN.
+
+Screen_Setup @ 0x5cf10 reads the descriptor integer with CFDictionaryGetInt64,
+stores it at screen+0, and falls back to CDioManagerComp::getValueInt(0x99).
+It does not allocate another context or create ScreenStream.
+
+StartSession @ 0x5e0b0:
+  initializes +0x24/+0x38/+0x40;
+  OpenSelfConnectedLoopbackSocket(screen+0x320);
+  ScreenStreamCreate(screen+0x328, arg6);
+  SetDelegateContext(stream,arg1);
+  SetMaxFPS(stream,arg6);
+  SetWindowOffset(stream,arg2,arg3);
+  SetWidthHeight(stream,arg4,arg5);
+  CopyDelegates(stream,arg7);
+  clear screen+0x33c; ScreenStreamStart(screen+0x328).
+
+ScreenStreamCreate @ 0xf7360 calls _CFRuntimeCreateInstance with size 0x70,
+zeroes its payload, calls IVideoAbstraction::createVideoImpl(), stores the
+video object at ScreenStream+0x70, and configures it via its vtable.
+PROVEN: this is an allocating factory, not a singleton accessor.
+
+ProcessFrames @ 0x5d070 reads +0x320 for transport and +0x328 for
+ScreenStreamProcessData (around 0x5d6c8), SetWidthHeight (0x5d9cc), and
+SetAVCC (0x5dd48). StopSession @ 0x5df90 calls ScreenStreamStop, CFRelease,
+clears +0x328, closes +0x320 and finalizes crypto.
+
+Writes/reads to +0x328 in the screen lifecycle:
+  0x5e11c, 0x5e140, 0x5e14c, 0x5e158, 0x5e168, 0x5e178, 0x5e18c;
+  0x5d274, 0x5d6c8, 0x5d9cc, 0x5dd48;
+  0x5dfb8, 0x5dfc4, clear at 0x5dfcc.
+
+Conclusion: the stock screen context has one direct ScreenStream slot and one
+socket slot. A second screen requires a second allocated screen context (or a
+container redesign), independent transport/delegate state, and an independent
+render target. Surrounding session-manager support for two contexts is UNKNOWN.

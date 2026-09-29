@@ -1,0 +1,25 @@
+AirPlayGetFeatures @ libairplay.so:0x49d40
+
+PROVEN operation: a configuration-derived mask is ORed with 0x6104040280.
+Bits set by this literal:
+  bit 7  0x0000000000000080
+  bit 9  0x0000000000000200
+  bit 18 0x0000000000040000
+  bit 26 0x0000000004000000
+  bit 32 0x0000000100000000
+  bit 37 0x0000002000000000
+  bit 38 0x0000004000000000
+
+| Bit | Mask | Meaning | Confidence | Evidence |
+|---:|---:|---|---|---|
+| 7 | 0x80 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+| 9 | 0x200 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+| 18 | 0x40000 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+| 26 | 0x4000000 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+| 32 | 0x100000000 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+| 37 | 0x2000000000 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+| 38 | 0x4000000000 | UNKNOWN | UNKNOWN | unconditional OR in AirPlayGetFeatures |
+
+No local individual-bit test was proven to assign an AltScreen meaning. No
+evidence equates one bit to Apple's "altScreen" feature string. The type-111
+rejection is a separate SETUP-dispatch fact.

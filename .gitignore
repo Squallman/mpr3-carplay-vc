@@ -1,0 +1,10 @@
+/.local-research/
+/build/
+/build-*/
+/build-manual/
+/cmake-build-*/
+/out/
+.DS_Store
+.idea/
+*.swp
+*.tmp

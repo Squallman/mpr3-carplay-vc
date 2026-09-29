@@ -1,0 +1,29 @@
+P3695 sidecar feasibility decision
+
+Proposed chain:
+
+  smartphone_integrator launches dio_manager             PROVEN
+    -> stock stream 110 remains stock                     PROVEN if forwarded unchanged
+    -> negotiation hook handles secondary                 PLAUSIBLE
+    -> independent secondary owner                         NEW COMPONENT REQUIRED
+    -> ScreenStream/decoder                                REUSABLE WITH SECOND INSTANCE
+    -> configured displayable X                            PLAUSIBLE; ownership unresolved
+    -> setActiveDisplayable(cluster, X)                    STRONG EVIDENCE client path; endpoint/policy UNKNOWN
+    -> stock videoencoderservice                           PROVEN existing consumer
+    -> Virtual Cockpit                                     PROVEN for valid endpoint/input
+
+Answers:
+  avoid modifying libairplay on disk: PLAUSIBLE via PLT/LD_PRELOAD seam;
+    runtime loader behavior still UNKNOWN.
+  avoid modifying videoencoderservice: YES IN PRINCIPLE / STRONG EVIDENCE;
+    vesdt uses the stock service interface.
+  avoid modifying DisplayManager/LayerConfig: PLAUSIBLE only if an existing
+    unoccupied configured displayable is proven safe.
+  preserve stock CarPlay 110 byte-for-byte: PLAUSIBLE if the setup hook forwards
+    the original type-110 dictionary and lifecycle unchanged.
+  minimum boundary: AirPlay SETUP/capability seam plus secondary owner and
+    VideoEncoding client. Advertisement and iAP2 gates may add input seams.
+
+No end-to-end implementation is proven. Open blockers are policy authorization,
+safe displayable occupancy/writer ownership, exact advertisement callback,
+active cluster endpoint, and P3695 nested iAP2 parameter semantics.

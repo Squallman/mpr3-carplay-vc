@@ -1,0 +1,28 @@
+P3695 cluster endpoint investigation
+
+Known configuration:
+  videoencoderservice.json defines CLUSTER, MINOR_CLUSTER and HUD pipelines.
+  CLUSTER uses /dev/vsd/link-txpipe1; MINOR_CLUSTER uses link-txpipe2;
+  HUD uses link-txpipe3. Each has MOST and Ethernet settings.
+  displaymanager.json defines physical Cluster_Display (1),
+  Cluster_Display_Subframe (80), and virtual display variants:
+    Virtual_Display_Cluster_MOST (90)
+    Virtual_Display_HUD_MOST (91)
+    Virtual_Display_Cluster_ETH (92)
+    Virtual_Display_HUD_ETH (93)
+    minor-cluster variants 94 and 95
+
+EMS metadata provides enum families but not the active runtime selection:
+  setActiveDisplayable endpoint class: CLUSTER=4, HUD=5
+  connection/display class: CLUSTER_MOST=0, HUD_MOST=1,
+    CLUSTER_ETH=2, HUD_ETH=3
+  video connection variants: MOST_CLUSTER=0, ETHERNET_CLUSTER=1,
+    MOST_HUD=2, ETHERNET_HUD=3, MOST_CLUSTER_MINOR=4,
+    ETHERNET_CLUSTER_MINOR=5
+
+The exact Audi endpoint and displayID used in the target runtime are UNKNOWN.
+The presence of MOST and Ethernet branches, connector-based display variants,
+and multiple virtual displays prevents a defensible MOST-only conclusion.
+No stock caller recovered in Phase 4 supplies the two setActiveDisplayable
+arguments. The normal native mapping therefore remains an open reverse-
+engineering target.

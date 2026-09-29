@@ -1,0 +1,23 @@
+P3695 Phase 4 feasibility matrix
+
+Layer                                      Classification                 Evidence summary
+iAP2 advertisement                         UNKNOWN                        Wireless component exists; ThemeAssets equivalent unresolved.
+AirPlay display advertisement              SMALL HOOK REQUIRED             Existing one-entry config/helper; second descriptor not proven.
+SETUP type-111 dispatch                    SMALL HOOK REQUIRED             Stock range 100..110 rejects 111; exact interposition seam unknown.
+Second screen context                      REUSABLE WITH SECOND INSTANCE    Stock screen allocation is per context, size 0x340.
+ScreenStream                               REUSABLE WITH SECOND INSTANCE    ScreenStreamCreate is independently callable.
+H.264 decoder                              REUSABLE WITH SECOND INSTANCE    Decoder factory/object path is instance-oriented; concurrency not proven.
+Renderer                                   UNKNOWN                        Config target is per sink; creator and multi-instance policy unresolved.
+IPTE displayable creation                  REUSABLE WITH SECOND INSTANCE    dint_create_displayable resolves configured name through CLayerConfig.
+Cluster selection                          UNKNOWN                        No stock setActiveDisplayable caller/active endpoint recovered.
+Cluster encoding                           AVAILABLE AS-IS                  Service accepts displayable ID, validates dimensions, feeds CEncoder.
+Independent teardown/fail-open             NEW SIDECAR REQUIRED             No type-111 lifecycle or failure policy exists in stock path.
+
+Decision:
+An LD_PRELOAD/shared-library hook plus a sidecar is TECHNICALLY PLAUSIBLE but
+not proven sufficient. A dio_manager-only hook cannot make stock libairplay
+accept type 111 unless an interposable SETUP seam is found. The technically
+required change is at the AirPlay dispatcher/session boundary plus capability
+advertisement and independent rendering state. The easiest architecture could
+be a process hook with a secondary owner if those seams are available; otherwise
+libairplay replacement/interposition is required. No implementation is made.

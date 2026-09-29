@@ -1,0 +1,23 @@
+P3695 video encoding client search
+
+TFFS signature hits included videoencoderservice itself and diagnostic/sample
+clients (encoderal_spec, encoding_poc, vc-ldt, mcp_viwibridge, ipte_sample,
+showimage). These hits prove that the APIs are present in the image, but no
+client call site was recovered that supplies the normal Audi navigation
+setActiveDisplayable arguments.
+
+videoencoderservice exports/contains the methods setActiveDisplayable,
+setDisplayable, getDisplayable, requestVideoConnection and
+releaseVideoConnection. Phase 2 recovered the IDL shape
+comm_idl_calls::call_struct_DisplayID_I32IVideoEncodingReply and a plausible
+displayID plus I32 displayable signature. The exact method-number mapping and
+normal client remain UNKNOWN.
+
+The native navigation executable navStartup directly imports display-init APIs,
+not the video encoding service. The HMI JavaScript has display-manager lookup
+calls but no setActiveDisplayable literal. Therefore no proven stock caller is
+reported here.
+
+Required next evidence is a generated proxy or service-discovery trace tying a
+specific client to method 9/10 (or another method), with constant display ID
+and displayable ID arguments. This phase did not obtain that proof.

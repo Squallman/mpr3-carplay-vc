@@ -1,0 +1,54 @@
+P3695 libairplay.so — AirPlayReceiverSessionSetup stream dispatch
+
+Binary: .local-research/mpr3/P3695/extracted/files/smartphone_integration/lib/libairplay.so
+
+Function: AirPlayReceiverSessionSetup, file/virtual address 0x58dc0.
+
+Descriptor parsing:
+  0x58f78-0x58f98: obtain the SETUP stream array from the request dictionary.
+  0x59008-0x59018: fetch one stream descriptor dictionary by array index.
+  0x59028-0x59038: CFDictionaryGetInt64(descriptor, key at 0x107128,
+                                        default=0); result is retained in x21.
+
+Dispatch:
+  0x59040: w0 = stream_type - 0x64 (100).
+  0x59044: compare w0 with 0x0a.
+  0x59048: B.HI 0x58fe8.
+  0x5904c-0x59060: signed 16-bit jump table at virtual address 0x105fe8,
+                   base 0x59064.
+
+Decoded jump table (entry index = type - 100):
+  type 100 -> 0x593f0
+  type 101 -> 0x593f0
+  type 102 -> 0x59258
+  type 103 -> 0x58fe8
+  type 104 -> 0x58fe8
+  type 105 -> 0x58fe8
+  type 106 -> 0x58fe8
+  type 107 -> 0x58fe8
+  type 108 -> 0x58fe8
+  type 109 -> 0x58fe8
+  type 110 -> 0x59068
+
+Type 110 path:
+  0x59068 checks session state, creates a reply dictionary at 0x59088,
+  calls AirPlayReceiverSessionScreen_Setup@plt at 0x590a8, and writes
+  integer 110 into the response dictionary at 0x59154-0x59160.
+
+Out-of-range path:
+  0x58fe8 is the common path reached both by the jump-table entries 103–109
+  and by B.HI for every type >110. It advances to the next descriptor at
+  0x58ff8-0x59004, or exits through the setup error/cleanup paths depending on
+  session state. Therefore 111–114 never reach the type-110 screen setup case.
+
+Classification requested:
+  110 HANDLED — dispatch target 0x59068; downstream
+      AirPlayReceiverSessionScreen_Setup at 0x590a8.
+  111 REJECTED — 111-100=11; B.HI at 0x59048 to 0x58fe8; no table entry.
+  112 REJECTED — same branch.
+  113 REJECTED — same branch. This is independent of screen protocol opcode
+      0x71 (decimal 113) handled in AirPlayReceiverSessionScreen_ProcessFrames.
+  114 REJECTED — same branch.
+
+Recognized table values are 100, 101, 102, and 110. Types 103–109 are present
+in the numeric range but dispatch to the common skip/error path, not a handler.

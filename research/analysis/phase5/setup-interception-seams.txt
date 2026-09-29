@@ -1,0 +1,42 @@
+P3695 SETUP interception seams
+
+## Best seam
+
+AirPlayReceiverSessionSetup @ 0x58dc0 is exported and called through the
+libairplay PLT at 0x4c7bc. Its input is already a parsed CFDictionary/session
+state, and it contains the proven type 100..110 dispatch. Classification:
+POSSIBLE FUNCTION HOOK, with STRONG EVIDENCE of ELF preemption potential.
+
+A replacement would conceptually inspect the stream array, side-handle or
+remove type 111, and invoke the original implementation with type 110 intact.
+This is not implemented here. Correct ownership/refcounting and original-call
+ABI remain to be proven.
+
+## Other seams
+
+  AirPlayReceiverSessionScreen_Setup: exported and PLT-called at 0x590a8.
+    Classification: POSSIBLE FUNCTION HOOK. It is too late to make stock
+    SETUP accept a new descriptor unless the dispatcher is bypassed first.
+
+  AirPlayReceiverSessionScreen_Create/StartSession/ProcessFrames:
+    exported and PLT-called. Classification: POSSIBLE FUNCTION HOOK for
+    lifecycle/secondary processing, but not sufficient for SETUP negotiation.
+
+  RTSP/HTTP parser before SessionSetup: no named external callback proving a
+    parsed-dictionary hook was recovered. Classification: UNKNOWN.
+
+  AirPlayReceiverServer delegate/control callbacks: dio_manager registers a
+    0xa0-byte AirPlayReceiverServerDelegate through
+    AirPlayReceiverServerSetDelegate. This is a real control-plane seam, but
+    the recovered delegate fields do not identify a SETUP dictionary callback.
+    Classification: UNKNOWN/POSSIBLE FUNCTION HOOK.
+
+  dio_manager session callbacks: named callbacks include session-created,
+    session-screen-created, setup-failed and session property callbacks. These
+    occur around the session lifecycle, but no callback was proven to receive
+    the raw SETUP stream array. Classification: UNKNOWN.
+
+Best current strategy: investigate/preload AirPlayReceiverSessionSetup first;
+if target loader binding prevents it, fall back to the higher AirPlay server
+delegate/control seam. Inline patching is not currently required by static ELF
+evidence, but may become necessary if symbol preemption is disabled at runtime.

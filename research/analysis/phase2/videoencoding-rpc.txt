@@ -1,0 +1,37 @@
+P3695 videoencoderservice static evidence
+
+Binary: .local-research/mpr3/P3695/extracted/files/usr/bin/videoencoderservice
+
+Recovered generated-interface evidence:
+  .rodata 0x31778: setActiveDisplayable
+  .rodata 0x329f0: setDisplayable
+  .rodata 0x31d28: requestVideoConnection
+  .rodata 0x31d40: releaseVideoConnection
+  .rodata 0x31c70: asi.VideoEncoding.IVideoEncoding
+  .rodata 0x37468: N3asi13VideoEncoding21IVideoEncodingRPCStubE
+  .rodata 0x376f8: comm_idl_calls::call_struct_DisplayID_I32IVideoEncodingReply
+
+The last type name is strong evidence that at least one IVideoEncoding RPC call
+serializes a DisplayID plus one 32-bit integer and returns IVideoEncodingReply.
+The stripped binary does not preserve the IDL method-name-to-method-ID mapping
+in a directly readable form. The available RPC stub code compares method IDs
+9 and 10 at 0x27200 and uses the generic serializer, but the corresponding
+names cannot be assigned without the IDL/header or a client proxy.
+
+Exact service-side displayable path:
+  0x1e080 loads the service object's IpteConnection.
+  0x1e088 moves the incoming integer argument w24 to w1.
+  0x1e08c calls gfx::IpteConnection::getDisplayable(int,
+      shared_ptr<IpteDisplayable>&)@plt.
+  0x1e09c-0x1e0b4 calls IpteDisplayable::width() and height().
+  0x1e0cc-0x1e0e0 rejects zero width or height.
+  0x1e200-0x1e238 passes the selected width/height onward.
+  0x1e250 calls gfx::CEncoder::create(Configuration)@plt.
+  The frame path calls gfx::CEncoder::feed(shared_ptr<IpteDisplayable>)@plt
+  at 0x1d498.
+
+Conclusion: a displayable ID is technically supplied as an integer to
+getDisplayable, and the resulting surface is fed to CEncoder after dimension
+validation. This proves an ID-based selection seam, not that arbitrary IDs are
+accepted by runtime policy and not that setActiveDisplayable has one specific
+signature.
