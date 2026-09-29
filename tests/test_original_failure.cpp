@@ -1,6 +1,17 @@
 #include "test_support.hpp"
-void test_original_failure() {
+void test_original_failure(mpr3_test::TestRun &test) {
   using namespace mpr3; using namespace mpr3_test;
-  std::vector<std::shared_ptr<MockCFDictionary>> seen; AirPlaySetupHook hook(recorder(&seen, -42), [](const auto &){return true;});
-  MockSetupResponse out; CHECK(hook.setup(nullptr, request({descriptor(110)}), &out)==-42); CHECK(out.status==-42);
+  for (int result : {0, -42, 123}) {
+    for (bool secondarySucceeds : {true, false}) {
+      MockAirPlay stock; stock.result = result;
+      MockSecondaryController secondary; secondary.result = secondarySucceeds;
+      AirPlaySetupHook hook(stock.handler(), secondary);
+      SetupResponse out;
+      auto r = request({descriptor(110), descriptor(111)});
+      CHECK(hook.setup(nullptr, r, &out) == result);
+      CHECK(out.status == result);
+      CHECK(stock.seenResponse == &out && stock.seenSession == nullptr);
+      CHECK(stock.calls == 1 && secondary.calls == 1);
+    }
+  }
 }
