@@ -9,7 +9,7 @@ check_artifacts() {
   for artifact in "$build"/* "$build"/.[!.]* "$build"/..?*; do
     [ -e "$artifact" ] || continue
     case "$artifact" in
-      "$build/airplay_setup_entry.o"|"$build/abi_header_consumer.o"|"$build/compiler.txt"|"$build/symbols.txt") ;;
+      "$build/airplay_setup_entry.o"|"$build/abi_header_consumer.o"|"$build/cflite_abi_header_consumer.o"|"$build/compiler.txt"|"$build/symbols.txt") ;;
       *) echo "Unexpected artifact in ABI inspection directory: $artifact" >&2; exit 1 ;;
     esac
   done
@@ -40,10 +40,15 @@ fi
 "$compiler" "$@" -std=c++17 -Wall -Wextra -Wpedantic -Werror \
   -I"$root/include" -I"$root/target/include" -c "$root/target/tests/abi_header_consumer.cpp" \
   -o "$build/abi_header_consumer.o"
+"$compiler" "$@" -std=c++17 -Wall -Wextra -Wpedantic -Werror \
+  -I"$root/target/include" -c "$root/target/tests/cflite_abi_header_consumer.cpp" \
+  -o "$build/cflite_abi_header_consumer.o"
 file "$build/airplay_setup_entry.o"
+file "$build/cflite_abi_header_consumer.o"
 if command -v python3 >/dev/null 2>&1; then
   python3 "$root/scripts/inspect-target-elf.py" "$build/airplay_setup_entry.o" >"$build/symbols.txt"
   cat "$build/symbols.txt"
+  python3 "$root/scripts/inspect-target-elf.py" "$build/cflite_abi_header_consumer.o" CFLiteAbiHeaderConsumer
 else
   echo "FAIL: python3 is required for portable ELF validation." >&2
   exit 1
@@ -62,4 +67,4 @@ else
   echo "nm/readelf unavailable; portable ELF symbol validation above passed."
 fi
 check_artifacts
-echo "PASS: AArch64 ABI object and isolated header compiled; no linked target artifact."
+echo "PASS: AArch64 SETUP object and isolated SETUP/CFLite headers compiled; no linked target artifact."

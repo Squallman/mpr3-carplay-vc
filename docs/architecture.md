@@ -18,8 +18,13 @@ filtering or secondary orchestration:
                         |
          stock libairplay (future runtime only)
 
-Future branch — NOT IMPLEMENTED:
-               CoreFoundation adapter
+Independent offline integration (not called by C entrypoint):
+             P3695 CFLite request adapter
+                        |
+           splitSecondaryDescriptors in core
+
+Future secondary runtime branch — NOT IMPLEMENTED:
+              target secondary binding
                         |
                         v
                    mpr3_core
@@ -39,6 +44,12 @@ The entry requires undefined runtime resolver/failure-policy integration and
 is excluded from core and test runtime. POSIX lookup is separately opt-in.
 See [target contracts](target-contracts.md), [CF contract](corefoundation-target-contract.md)
 and [later adapters/restoration blocker](target-adapter-contracts.md).
+The [CFLite adapter](cf-setup-adapter.md) uses an immutable resolved API and a
+shared context owning dynamic streams/type keys. Borrowed requests preserve
+caller ownership; copied requests and retained descriptors release their own
+references. Its offline filter delegates exact111 selection to existing core
+and exposes original-request selection on failure. No target secondary binding
+or real stock invocation is added to that path.
 
 ```mermaid
 flowchart TD
@@ -86,11 +97,14 @@ mpr3_mocks:
   MockCF request adapters + mock stock handler + mock lifecycle services
   mock pipeline factory + mock VideoEncoding + capability status mocks
 
-Opt-in, independent of core:
+Opt-in target layer (core has no dependency on it):
   mpr3_target_contracts (STATIC) -> typed resolver + pass-through bridge
   mpr3_target_entry_object (OBJECT) -> undefined runtime integration contracts
   mpr3_target_header_object (OBJECT) -> isolated ABI consumer
   mpr3_target_tests -> target contracts + core (default-config check only)
+  mpr3_target_cf_adapter (STATIC) -> CFLite ABI/API + request interfaces + core filter
+  mpr3_target_cflite_header_object (OBJECT) -> isolated low-level CFLite ABI consumer
+  mpr3_target_cf_tests -> CF adapter + test-only fake CFLite runtime
 ```
 
 Evidence-backed target shapes are the three-argument SETUP function, stock
@@ -99,9 +113,12 @@ configured displayable name resolution, and direct displayable-to-encoder
 selection through VideoEncoding. Host ownership and lifecycle policies are
 implementation proposals, not recovered target behavior.
 
-The complete secondary advertisement, delegate slot, iOS trigger, P3695
-parameter-17/ThemeAssets behavior, loader/COMM authorization, safe displayable,
+Phase 7/8 recover the generic displays dispatch (delegate+0x18/server+0x30),
+exact SETUP keys/helper ABIs and a bounded retaining shallow-copy contract.
+These support the separate CFLite adapter without changing core architecture.
+The complete client-valid secondary advertisement, iOS trigger, P3695
+child17/ThemeAssets capability relevance, loader/COMM authorization, safe displayable,
 active endpoint/service variant, concurrent target lifecycle, and output
 restoration remain UNKNOWN. No production service adapter or deployment code is added.
-See [v2 details](offline-prototype-v2.md) and the unchanged
-[Phase 5/6 evidence index](../research/analysis/README.md).
+See [v2 details](offline-prototype-v2.md) and the
+[Phase 1–8 evidence index](../research/analysis/README.md); historical reports are unchanged.

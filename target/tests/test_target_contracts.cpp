@@ -17,7 +17,9 @@ void test_capabilities(TestRun &test) {
       ++unresolved;
     }
   }
-  CHECK(unresolved == 6);
+  CHECK(unresolved == 5);
+  CHECK(targetCapabilities[2].availability == AdapterAvailability::ImplementedOffline);
+  CHECK(targetCapabilities[2].evidence == TargetContractStatus::StrongEvidence);
   CHECK(!canClaimTargetReadyOutput(currentOutputEvidence));
 }
 void test_restoration_blocker(TestRun &test) {

@@ -1,9 +1,11 @@
 # Stage 3: target contracts and compile-only boundary
 
 This is OFFLINE work. Prototype v2 remains the core architecture. The current
-target layer does not parse dictionaries, intercept 111, advertise a display or
-start secondary resources. Every request, including stock type 110, is forwarded
-unchanged when resolution succeeds.
+exported entrypoint does not parse dictionaries, intercept 111, advertise a
+display or start secondary resources. Every request, including stock type110,
+is forwarded unchanged when resolution succeeds. A separate
+[CFLite SETUP adapter](cf-setup-adapter.md) implements input adaptation and
+offline core filtering; it is not connected to that entrypoint.
 
 ## Canonical ABI
 
@@ -82,15 +84,18 @@ is excluded from core and test runtime and is never linked into a shared hook.
 ## Build and verification
 
 `./scripts/build-local.sh` retains the core/mocks/tests host behavior with no
-target include, lookup or libdl requirements. Both new options default OFF.
+target include, lookup or libdl requirements. Contracts and both POSIX resolver
+options default OFF.
 `./scripts/build-target-contracts.sh` opts into additional host tests and unlinked
 entry/header objects. CMake additionally produces a STATIC contract library,
-independent of core even if `BUILD_SHARED_LIBS` is ON. Target tests link core
-only to verify unchanged default configuration. No shared-library or install
+independent of core even if `BUILD_SHARED_LIBS` is ON. The separate STATIC
+`mpr3_target_cf_adapter` links the platform-neutral core filter; its fake-runtime
+test executable is independent of the pass-through tests. The contracts suite
+uses core only to verify unchanged default configuration. No shared hook or install
 target exists.
 
 `./scripts/check-target-abi.sh` uses installed cross tools to compile the
-dependency-free entry and isolated header consumer for `aarch64-linux-gnu`.
+dependency-free entry and isolated SETUP/CFLite header consumers for `aarch64-linux-gnu`.
 It verifies ELF64/ET_REL/EM_AARCH64 and a unique GLOBAL FUNC DEFAULT unmangled
 symbol. No sysroot or extracted library is required. `file` and available
 nm/readelf report the object; a portable Python ELF reader validates it even
@@ -100,7 +105,8 @@ only named objects/logs and rejects unexpected linked or packaging artifacts.
 Objects are never executed.
 
 Validation on the Stage 3 host (Apple Clang 21): existing host suite **34 groups /
-687 assertions**, additional target suite **13 groups / 105 assertions**, both
+687 assertions**, additional target suite now **13 groups / 106 assertions**
+(updated CF availability), CFLite adapter **25 groups / 774 assertions**, all
 also passing AddressSanitizer/UndefinedBehaviorSanitizer. Opt-in POSIX code
 compiles on the host; tests still use fakes. CMake is unavailable here, so the
 direct host build paths were exercised; the CMake path has not been run.
@@ -127,7 +133,7 @@ Metadata is never used in the pass-through hot path.
 |---|---|---|---|
 | AirPlay SETUP ABI | STRONG EVIDENCE | UNKNOWN | Contract and unlinked entry |
 | RTLD_NEXT resolver | PLAUSIBLE | UNKNOWN | Explicit POSIX build only |
-| CoreFoundation adapter | UNKNOWN | UNKNOWN | NOT IMPLEMENTED |
+| CoreFoundation adapter | STRONG EVIDENCE | UNKNOWN | IMPLEMENTED OFFLINE/TARGET-CONTRACT LAYER |
 | ScreenStream adapter | UNKNOWN | UNKNOWN | NOT IMPLEMENTED |
 | display-init adapter | UNKNOWN | UNKNOWN | NOT IMPLEMENTED |
 | VideoEncoding COMM adapter | UNKNOWN | UNKNOWN | NOT IMPLEMENTED |
@@ -141,7 +147,9 @@ without previous selection, restoration, native-navigation race policy and
 restoration-before-destruction evidence. This is introspection only; it neither
 detects runtime readiness nor activates/restores output.
 
-Delegate slot, full secondary descriptor, P3695 parameter-17/ThemeAssets, iOS
-type-111 trigger, CF key/helper ABIs, target service ABIs, endpoint, occupancy,
+Phase 7/8 recovered exact SETUP key/helper ABIs, bounded stock request ownership
+and generic displays dispatch at delegate+0x18/server+0x30. Full client-valid
+secondary descriptor, balanced displays callback ownership, P3695 child17/ThemeAssets
+capability relevance, iOS type111 trigger, actual CF binding, target service ABIs, endpoint, occupancy,
 authorization, concurrent lifecycle and restoration remain **UNKNOWN**.
 Comparative MHI2Q/MHI3 findings are never promoted to MPR3 constants.

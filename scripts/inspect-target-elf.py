@@ -8,7 +8,7 @@ import struct
 import sys
 
 
-def inspect(path):
+def inspect(path, required_symbol="AirPlayReceiverSessionSetup"):
     data = pathlib.Path(path).read_bytes()
     if data[:6] != b"\x7fELF\x02\x01":
         raise ValueError("expected ELF64 little-endian object")
@@ -30,15 +30,17 @@ def inspect(path):
             end = table.index(b"\0", name)
             symbols.append((table[name:end].decode(), info >> 4, info & 15,
                             other & 3, index, value, size))
-    matches = [s for s in symbols if s[0] == "AirPlayReceiverSessionSetup"]
+    if required_symbol not in ("AirPlayReceiverSessionSetup", "CFLiteAbiHeaderConsumer"):
+        raise ValueError("unknown ABI inspection symbol")
+    matches = [s for s in symbols if s[0] == required_symbol]
     if len(matches) != 1 or matches[0][1:4] != (1, 2, 0) or matches[0][4] == 0:
-        raise ValueError("missing unique GLOBAL FUNC DEFAULT defined unmangled SETUP symbol")
+        raise ValueError(f"missing unique GLOBAL FUNC DEFAULT defined unmangled {required_symbol} symbol")
     if any("SecondaryController" in s[0] for s in symbols):
         raise ValueError("entry object unexpectedly references SecondaryController")
     print("ELF64 little-endian / REL / AArch64")
     print("Value             Size Type Bind   Vis     Name")
     symbol = matches[0]
-    print(f"{symbol[5]:016x} {symbol[6]:5d} FUNC GLOBAL DEFAULT AirPlayReceiverSessionSetup")
+    print(f"{symbol[5]:016x} {symbol[6]:5d} FUNC GLOBAL DEFAULT {required_symbol}")
     for symbol in symbols:
         if symbol[1] == 1 and symbol[4] == 0:
             print(f"UND {symbol[0]}")
@@ -46,6 +48,6 @@ def inspect(path):
 
 if __name__ == "__main__":
     try:
-        inspect(sys.argv[1])
+        inspect(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "AirPlayReceiverSessionSetup")
     except (IndexError, OSError, ValueError, struct.error) as error:
         sys.exit(f"ELF inspection failed: {error}")

@@ -1,47 +1,49 @@
 # CoreFoundation target adapter contract
 
-No real CF adapter is implemented. Pointers stay opaque; there are no guessed
-signatures, key strings, callback tables, layouts or addresses. This is the
-design contract for a future `ISetupRequest` / `ISetupDescriptor` adapter.
+**READY_FOR_CF_ADAPTER — IMPLEMENTED OFFLINE/TARGET-CONTRACT LAYER.**
+Phase 7 recovered the actual P3695 CFLite helper ABIs and key text; Phase 8
+closed the bounded stock SETUP lifetime contract. The dedicated adapter now
+implements `ISetupRequest` / `ISetupDescriptor` under `target/`, with ownership
+and failure tests against a separate fake CFLite runtime. Runtime binding
+validation and vehicle interception remain false. The exported compile-only
+SETUP entrypoint remains pass-through.
 
-Sources: [SETUP dictionary](../research/analysis/phase6/setup-dictionary-contract.md),
-[ABI/ownership](../research/analysis/phase6/airplay-session-setup-abi.md) and
-[hook contract](../research/analysis/phase6/runtime-hook-contract.md).
-Semantic streams/type identification is **STRONG EVIDENCE**; exact target key
-objects, linkage and helper signatures still require proof. Labels below are
-documentation, never target lookup constants.
+Sources: [helper ABI](../research/analysis/phase7/cf-helper-abi.md),
+[key map](../research/analysis/phase7/setup-key-map.md),
+[request escape](../research/analysis/phase8/request-escape-analysis.md),
+[parser ownership](../research/analysis/phase8/setup-request-origin.md), and
+[readiness v2](../research/analysis/phase8/cf-adapter-readiness-v2.md).
+Detailed implementation and validation: [CFLite adapter](cf-setup-adapter.md).
 
 | Required operation | Evidence | ABI known? | Implement now? |
 |---|---|---|---|
-| Obtain streams array; detect absent/malformed | STRONG EVIDENCE: typed lookup at 0x58f88 | UNKNOWN: helper/key object/type checks | No |
-| Enumerate retained descriptors in order | STRONG EVIDENCE: typed iteration at 0x59010–0x5901c | UNKNOWN: index/count ABI and ownership | No |
-| Read wide integer descriptor type | STRONG EVIDENCE: lookup at 0x59038; 100..110 dispatch | UNKNOWN: helper/key/error semantics | No |
-| Shallow request copy | PLAUSIBLE: read-only request path and proposed filtering | UNKNOWN: copy/allocator/error ownership | No |
-| Replacement streams array | PLAUSIBLE: reuse original dictionaries | UNKNOWN: create/append/callback ABI | No |
-| Reuse original descriptors | STRONG EVIDENCE: unchanged 110 pointer at 0x590a8 | UNKNOWN: retention and hidden mutation | No |
-| Preserve opaque request data | Required core contract; shallow copy PLAUSIBLE | UNKNOWN: safe copy/replace operation | No |
-| Retain/release on all paths | STRONG EVIDENCE: caller releases request/response | UNKNOWN: balances and transfer rules | No |
-| Return stock response ownership-neutrally | STRONG EVIDENCE: x2 output/caller release | UNKNOWN: complete error-path ownership | Pointer forwarding only |
+| Obtain typed streams array | STRONG EVIDENCE: CFDictionaryGetTypedValue; PROVEN exact `streams` key text | Recovered pointer/w32/error-out shape | Implemented |
+| Enumerate dictionaries in order | STRONG EVIDENCE: CFArrayGetCount / CFArrayGetTypedValueAtIndex | Recovered 32-bit count/index/type selectors | Implemented |
+| Read wide descriptor type | STRONG EVIDENCE: CFDictionaryGetInt64; PROVEN `type` key text | Recovered signed Int64 plus int32 error-out | Implemented |
+| Create content-equal dynamic keys | STRONG EVIDENCE: CString creation, string equality/hash | Null allocator, text, recovered selector 0x08000100 | Implemented; owned keys |
+| Shallow request copy | STRONG EVIDENCE: mutable copy inherits retaining source callbacks | Null allocator, 32-bit capacity, source pointer | Implemented |
+| Replacement streams array | STRONG EVIDENCE: exported kCFLArrayCallBacksCFLTypes retains elements | Null allocator, 32-bit capacity, opaque callbacks | Implemented |
+| Reuse original descriptor identities | STRONG EVIDENCE: append/set retain original pointers | Signed int32 mutation statuses | Implemented; every status checked |
+| Preserve opaque request data | STRONG EVIDENCE: shallow dictionary copy replaces only streams | Copy/SetValue recovered | Implemented |
+| Retain/release through failure and unwinding | STRONG EVIDENCE: runtime finalizers and Phase 8 stock consumers | Recovered CFRetain/CFRelease | Implemented with local guards and explicit descriptor retains |
+| Preserve stock response ownership | STRONG EVIDENCE: separate response/cleanup paths | Canonical three-argument SETUP ABI | Existing pass-through only; adapter never calls stock |
 
-Future `streams()` must retain objects during use, preserve order/identity and
-reject malformed input without partial extraction. `type()` must distinguish
-unreadable values without narrowing unfamiliar integers into 111. Other fields
-remain opaque. `withStreams()` must reuse original descriptors, preserve all
-other request fields and avoid source mutation. Failure must forward the
-original once and skip secondary startup. Stock 110 identity remains intact.
+The extra key `streamConnectionID` is proven but unnecessary here and is not
+created. No image address or Apple type/header is used. Callback layouts stay
+opaque; retaining behavior is recovered rather than invented.
 
-The adapter will own retained descriptors and temporary copies/arrays and must
-release them after use and partial failure. Allocators/callback retention,
-borrowed references and delayed stock use remain **UNKNOWN**. These balances
-must be proven before encoding RAII; mock pointers never substitute for CF.
+Borrowed requests do not retain/release the caller's dictionary. Copied requests
+own their dictionary. Descriptors explicitly retain their raw dictionary and
+share the context; they can outlive enumeration and either request. A future
+bounded stock forwarding path may release its temporary request after stock
+returns, as established by Phase 8; this branch does not wire that path.
 
-Required evidence before implementation:
+All adaptation failures select the original request unchanged, without a target
+error code or partial secondary collection. Type110 identity and unfamiliar
+non111 values are preserved. The comparison to 111 remains in core.
 
-- Exact exported signatures/calling conventions for dictionary, array, type,
-  integer, copy, allocator and retain/release helpers.
-- Target key objects and linkage; the additional connection/port key is UNKNOWN.
-- Array callback layout, retention, mutability and safe opaque shallow copying.
-- Request/descriptor/response ownership on every error path, delayed stock use,
-  thread affinity and teardown.
-- Copy-failure handling that preserves stock response/status and suppresses
-  partially extracted secondary work.
+**UNKNOWN:** actual process symbol binding, loader policy, concurrent container
+mutation, replacement delegate behavior and target thread/lifetime validation.
+These require separately authorized runtime evidence. Advertisement schema,
+callback reference accounting and secondary service contracts remain separate
+blockers. Fake-runtime success is not target runtime validation.

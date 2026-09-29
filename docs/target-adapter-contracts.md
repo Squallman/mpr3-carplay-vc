@@ -86,7 +86,9 @@ ownership, acknowledgement and destruction order require direct evidence.
 
 ## Advertisement and iAP2 placeholders
 
-Existing core capability interfaces remain unchanged. Advertisement delegate
-slot, complete second descriptor, P3695 parameter-17/ThemeAssets and causal iOS
-type-111 trigger remain **UNKNOWN**. No infoRequestDisplays hook, delegate patch
+Existing core capability interfaces remain unchanged. Phase 7/8 recover the
+generic displays delegate+0x18/server+0x30 dispatch and manager property binding.
+Complete client-valid second descriptor, balanced callback ownership, P3695
+child17/ThemeAssets capability relevance and causal iOS type111 trigger remain
+**UNKNOWN**. No infoRequestDisplays hook, delegate patch
 or capability emission is implemented. MHI2Q/MHI3 findings remain comparative.

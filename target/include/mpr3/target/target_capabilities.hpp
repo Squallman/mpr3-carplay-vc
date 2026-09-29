@@ -3,7 +3,7 @@
 namespace mpr3::target {
 // Evidence classifications and implementation availability are separate axes.
 enum class TargetContractStatus { Proven, StrongEvidence, Plausible, Unknown, Disproven };
-enum class AdapterAvailability { ContractOnly, OptInPosix, NotImplemented };
+enum class AdapterAvailability { ContractOnly, OptInPosix, ImplementedOffline, NotImplemented };
 struct TargetCapability {
   const char *name;
   TargetContractStatus evidence;
@@ -15,8 +15,8 @@ inline constexpr TargetCapability targetCapabilities[] = {
       AdapterAvailability::ContractOnly},
   {"RTLD_NEXT resolver", TargetContractStatus::Plausible, TargetContractStatus::Unknown,
       AdapterAvailability::OptInPosix},
-  {"CoreFoundation adapter", TargetContractStatus::Unknown, TargetContractStatus::Unknown,
-      AdapterAvailability::NotImplemented},
+  {"CoreFoundation adapter", TargetContractStatus::StrongEvidence, TargetContractStatus::Unknown,
+      AdapterAvailability::ImplementedOffline},
   {"ScreenStream adapter", TargetContractStatus::Unknown, TargetContractStatus::Unknown,
       AdapterAvailability::NotImplemented},
   {"display-init adapter", TargetContractStatus::Unknown, TargetContractStatus::Unknown,

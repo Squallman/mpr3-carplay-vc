@@ -14,14 +14,18 @@ screen path from iPhone to an Audi cluster display.
 Prototype v2 models the complete proposed control flow on the host: SETUP
 filtering, stock forwarding, a secondary controller, configured displayable
 acquisition, pipeline construction/startup, optional VideoEncoding activation,
-and deterministic cleanup. Request adapters and all device services are mocked.
+and deterministic cleanup. Its normal host suite uses mock request adapters
+and device services.
 There is no vehicle deployment, firmware patch, install package, or claim that
 P3695 supports working AltScreen today.
 
 Stage 3 adds an opt-in target contract layer: a canonical opaque AirPlay ABI,
 testable original resolver, exact pass-through bridge, capability/blocker metadata
-and an exported compile-only entry object. Real CF and device-service adapters
-remain unimplemented. See [target contracts](docs/target-contracts.md) and
+and an exported compile-only entry object. A separate P3695 CFLite SETUP adapter
+now implements the recovered request ABI and ownership contract, validated
+offline with a dedicated fake runtime. It is not connected to that entrypoint,
+which remains pass-through; device-service adapters remain unimplemented.
+See [CFLite adapter](docs/cf-setup-adapter.md), [target contracts](docs/target-contracts.md) and
 [target boundary](target/README.md).
 
 ## Proven high-level findings
@@ -37,7 +41,7 @@ remain unimplemented. See [target contracts](docs/target-contracts.md) and
 
 ## Unresolved
 
-The iOS type-111 capability trigger, P3695 parameter-17 behavior, complete
+The iOS type-111 capability trigger, client relevance of P3695 child17, complete
 secondary descriptor, AppArmor/loader authorization, active MOST/Ethernet
 endpoint, safe production displayable, and target concurrent lifecycle remain
 unresolved.
@@ -62,7 +66,7 @@ policies, contracts, test coverage, and target adapter boundaries.
 ## Research
 
 See [`research/analysis/README.md`](research/analysis/README.md) for the Phase
-1–6 evidence index. The large local firmware workspace is
+1–8 evidence index. The large local firmware workspace is
 `.local-research/mpr3/P3695/`; it is intentionally ignored and is not required
 to understand the tracked architecture.
 
@@ -84,12 +88,13 @@ If CMake is unavailable, the script uses `${CXX:-clang++}` directly with C++17
 and `-Wall -Wextra -Wpedantic -Werror`. Both build paths run the same test suite
 and print its test-group/assertion totals. No target AArch64 binary is executed.
 
-Optional offline target checks (both target build options default OFF):
+Optional offline target checks (contracts and both POSIX resolver options default OFF):
 
 ```sh
 ./scripts/build-target-contracts.sh
 ./scripts/check-target-abi.sh
 ```
 
-The second script compiles/inspects an AArch64/Linux object with installed tools
-only. No loadable hook or deployment workflow is produced.
+The first also runs dedicated CFLite ownership/filtering tests. The second
+compiles/inspects dependency-free SETUP and CFLite AArch64/Linux objects with
+installed tools only. No loadable hook or deployment workflow is produced.
